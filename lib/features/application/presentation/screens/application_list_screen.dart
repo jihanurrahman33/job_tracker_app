@@ -253,6 +253,8 @@ class _ApplicationListScreenState extends State<ApplicationListScreen> {
                             onDismissed: (_) {
                               context.read<ApplicationBloc>().add(
                                   DeleteApplicationItemEvent(application.id));
+                              context.read<DashboardBloc>().add(
+                                  const LoadDashboardDataEvent(refresh: true));
                             },
                             background: Container(
                               margin: const EdgeInsets.symmetric(vertical: 6),
@@ -269,10 +271,15 @@ class _ApplicationListScreenState extends State<ApplicationListScreen> {
                             child: ApplicationCardWidget(
                               application: application,
                               onTap: () async {
-                                await context.push('/applications/${application.id}');
+                                await context
+                                    .push('/applications/${application.id}');
                                 if (context.mounted) {
-                                  context.read<ApplicationBloc>().add(const LoadApplicationsEvent(refresh: true));
-                                  context.read<DashboardBloc>().add(const LoadDashboardDataEvent(refresh: true));
+                                  context.read<ApplicationBloc>().add(
+                                      const LoadApplicationsEvent(
+                                          refresh: true));
+                                  context.read<DashboardBloc>().add(
+                                      const LoadDashboardDataEvent(
+                                          refresh: true));
                                 }
                               },
                             ),

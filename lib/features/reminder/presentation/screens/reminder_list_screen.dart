@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:job_tracker/features/dashboard/presentation/bloc/dashboard_bloc.dart';
+import 'package:job_tracker/features/dashboard/presentation/bloc/dashboard_event.dart';
 import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/widgets/confirmation_dialog.dart';
 import '../../../../core/widgets/empty_state_widget.dart';
@@ -38,7 +40,7 @@ class _ReminderListScreenState extends State<ReminderListScreen>
   @override
   Widget build(BuildContext context) {
     return ResponsiveScaffold(
-      maxWidth: 800,
+      maxWidth: 700,
       appBar: AppBar(
         title: const Text('Reminders & Tasks',
             style: TextStyle(fontWeight: FontWeight.bold)),
@@ -57,6 +59,9 @@ class _ReminderListScreenState extends State<ReminderListScreen>
             context
                 .read<ReminderBloc>()
                 .add(const LoadRemindersEvent(refresh: true));
+            context
+                .read<DashboardBloc>()
+                .add(const LoadDashboardDataEvent(refresh: true));
           }
         },
         icon: const Icon(Icons.add_task_rounded),
@@ -149,6 +154,9 @@ class _ReminderListScreenState extends State<ReminderListScreen>
               context
                   .read<ReminderBloc>()
                   .add(DeleteReminderEvent(reminder.id));
+              context
+                  .read<DashboardBloc>()
+                  .add(const LoadDashboardDataEvent(refresh: true));
             },
             background: Container(
               margin: const EdgeInsets.symmetric(vertical: 4),
@@ -169,6 +177,9 @@ class _ReminderListScreenState extends State<ReminderListScreen>
                         completed: val,
                       ),
                     );
+                context
+                    .read<DashboardBloc>()
+                    .add(const LoadDashboardDataEvent(refresh: true));
               },
             ),
           );

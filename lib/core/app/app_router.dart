@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:job_tracker/features/application/domain/entities/application_entity.dart';
+import 'package:job_tracker/features/application/presentation/bloc/application_bloc.dart';
+import 'package:job_tracker/features/application/presentation/bloc/application_event.dart';
 import 'package:job_tracker/features/application/presentation/screens/application_detail_screen.dart';
 import 'package:job_tracker/features/application/presentation/screens/application_form_screen.dart';
 import 'package:job_tracker/features/application/presentation/screens/application_list_screen.dart';
 import 'package:job_tracker/features/auth/presentation/screens/login_screen.dart';
 import 'package:job_tracker/features/auth/presentation/screens/register_screen.dart';
 import 'package:job_tracker/features/auth/presentation/screens/splash_screen.dart';
+import 'package:job_tracker/features/dashboard/presentation/bloc/dashboard_bloc.dart';
+import 'package:job_tracker/features/dashboard/presentation/bloc/dashboard_event.dart';
 import 'package:job_tracker/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:job_tracker/features/interview/domain/entities/interview_entity.dart';
 import 'package:job_tracker/features/interview/presentation/screens/interview_detail_screen.dart';
 import 'package:job_tracker/features/interview/presentation/screens/interview_form_screen.dart';
 import 'package:job_tracker/features/reminder/domain/entities/reminder_entity.dart';
+import 'package:job_tracker/features/reminder/presentation/bloc/reminder_bloc.dart';
+import 'package:job_tracker/features/reminder/presentation/bloc/reminder_event.dart';
 import 'package:job_tracker/features/reminder/presentation/screens/reminder_form_screen.dart';
 import 'package:job_tracker/features/reminder/presentation/screens/reminder_list_screen.dart';
 import 'package:job_tracker/features/settings/presentation/screens/settings_screen.dart';
@@ -29,11 +36,10 @@ final GlobalKey<NavigatorState> _settingsNavigatorKey =
 class AppRouter {
   static final GoRouter router = GoRouter(
     navigatorKey: _rootNavigatorKey,
-    initialLocation: '/splash',
+    initialLocation: '/',
     routes: [
       GoRoute(
-        path: '/splash',
-        parentNavigatorKey: _rootNavigatorKey,
+        path: '/',
         builder: (context, state) => const SplashScreen(),
       ),
       GoRoute(
@@ -108,6 +114,14 @@ class AppRouter {
                           );
                         },
                       ),
+                      GoRoute(
+                        path: 'reminders/create',
+                        parentNavigatorKey: _rootNavigatorKey,
+                        builder: (context, state) {
+                          final appId = state.pathParameters['id']!;
+                          return ReminderFormScreen(applicationId: appId);
+                        },
+                      ),
                     ],
                   ),
                 ],
@@ -124,14 +138,7 @@ class AppRouter {
                   GoRoute(
                     path: 'create',
                     parentNavigatorKey: _rootNavigatorKey,
-                    builder: (context, state) {
-                      final appId = state.uri.queryParameters['application_id'];
-                      final initialTitle = state.uri.queryParameters['title'];
-                      return ReminderFormScreen(
-                        applicationId: appId,
-                        initialTitle: initialTitle,
-                      );
-                    },
+                    builder: (context, state) => const ReminderFormScreen(),
                   ),
                   GoRoute(
                     path: ':id/edit',
@@ -181,11 +188,21 @@ class ScaffoldWithNavBar extends StatelessWidget {
     required this.navigationShell,
   });
 
-  void _onDestinationSelected(int index) {
+  void _onDestinationSelected(BuildContext context, int index) {
     navigationShell.goBranch(
       index,
       initialLocation: index == navigationShell.currentIndex,
     );
+
+    // Refresh state when switching tabs
+    if (index == 0) {
+      context.read<DashboardBloc>().add(const LoadDashboardDataEvent(refresh: true));
+      context.read<ReminderBloc>().add(const LoadRemindersEvent(refresh: true));
+    } else if (index == 1) {
+      context.read<ApplicationBloc>().add(const LoadApplicationsEvent(refresh: true));
+    } else if (index == 2) {
+      context.read<ReminderBloc>().add(const LoadRemindersEvent(refresh: true));
+    }
   }
 
   @override
@@ -194,7 +211,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
       body: navigationShell,
       bottomNavigationBar: NavigationBar(
         selectedIndex: navigationShell.currentIndex,
-        onDestinationSelected: _onDestinationSelected,
+        onDestinationSelected: (index) => _onDestinationSelected(context, index),
         destinations: const [
           NavigationDestination(
             icon: Icon(Icons.dashboard_outlined),
