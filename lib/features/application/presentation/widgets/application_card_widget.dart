@@ -24,7 +24,7 @@ class ApplicationCardWidget extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(16),
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(14.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -32,7 +32,7 @@ class ApplicationCardWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CircleAvatar(
-                    radius: 20,
+                    radius: 18,
                     backgroundColor:
                         theme.colorScheme.primary.withValues(alpha: 0.12),
                     child: Text(
@@ -42,11 +42,11 @@ class ApplicationCardWidget extends StatelessWidget {
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: theme.colorScheme.primary,
-                        fontSize: 18,
+                        fontSize: 16,
                       ),
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -55,6 +55,7 @@ class ApplicationCardWidget extends StatelessWidget {
                           application.position,
                           style: theme.textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,
+                            fontSize: 15,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -65,6 +66,7 @@ class ApplicationCardWidget extends StatelessWidget {
                           style: theme.textTheme.bodyMedium?.copyWith(
                             color: theme.colorScheme.onSurface
                                 .withValues(alpha: 0.7),
+                            fontSize: 13,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -72,45 +74,50 @@ class ApplicationCardWidget extends StatelessWidget {
                       ],
                     ),
                   ),
+                  const SizedBox(width: 6),
                   StatusBadge(status: application.status),
                 ],
               ),
-              const SizedBox(height: 12),
-              const Divider(height: 1),
               const SizedBox(height: 10),
+              const Divider(height: 1),
+              const SizedBox(height: 8),
               Row(
                 children: [
                   if (application.location != null &&
                       application.location!.isNotEmpty) ...[
                     Icon(
                       Icons.location_on_outlined,
-                      size: 14,
+                      size: 13,
                       color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                     ),
                     const SizedBox(width: 4),
-                    Text(
-                      application.location!,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color:
-                            theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                    Flexible(
+                      child: Text(
+                        application.location!,
+                        style: TextStyle(
+                          fontSize: 11,
+                          color:
+                              theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    const Spacer(),
+                    const SizedBox(width: 8),
                   ] else ...[
                     const Spacer(),
                   ],
                   if (application.appliedAt != null) ...[
                     Icon(
                       Icons.calendar_today_outlined,
-                      size: 13,
+                      size: 12,
                       color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                     ),
                     const SizedBox(width: 4),
                     Text(
                       'Applied: ${application.appliedAt!.toShortDate()}',
                       style: TextStyle(
-                        fontSize: 12,
+                        fontSize: 11,
                         color:
                             theme.colorScheme.onSurface.withValues(alpha: 0.6),
                       ),

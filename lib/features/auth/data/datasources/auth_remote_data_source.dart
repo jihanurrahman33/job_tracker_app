@@ -39,8 +39,14 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     );
 
     if (response is Map<String, dynamic>) {
-      final token = response['token'] as String? ?? '';
-      final userJson = response['user'] as Map<String, dynamic>?;
+      final data = (response.containsKey('data') && response['data'] is Map<String, dynamic>)
+          ? response['data'] as Map<String, dynamic>
+          : response;
+
+      final token = (data['token'] ?? response['token'] ?? '') as String;
+      final userJson = data['user'] is Map<String, dynamic>
+          ? data['user'] as Map<String, dynamic>
+          : (data.containsKey('email') ? data : null);
 
       if (userJson != null) {
         final user = UserModel.fromJson(userJson);
@@ -68,8 +74,14 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     );
 
     if (response is Map<String, dynamic>) {
-      final token = response['token'] as String? ?? '';
-      final userJson = response['user'] as Map<String, dynamic>?;
+      final data = (response.containsKey('data') && response['data'] is Map<String, dynamic>)
+          ? response['data'] as Map<String, dynamic>
+          : response;
+
+      final token = (data['token'] ?? response['token'] ?? '') as String;
+      final userJson = data['user'] is Map<String, dynamic>
+          ? data['user'] as Map<String, dynamic>
+          : (data.containsKey('email') ? data : null);
 
       if (userJson != null) {
         final user = UserModel.fromJson(userJson);
@@ -95,7 +107,18 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     final response = await apiClient.get(ApiEndpoints.me);
 
     if (response is Map<String, dynamic>) {
-      return UserModel.fromJson(response);
+      final data = (response.containsKey('data') && response['data'] is Map<String, dynamic>)
+          ? response['data'] as Map<String, dynamic>
+          : response;
+
+      final userJson = data['user'] is Map<String, dynamic>
+          ? data['user'] as Map<String, dynamic>
+          : (data.containsKey('email') ? data : null);
+
+      if (userJson != null) {
+        return UserModel.fromJson(userJson);
+      }
+      return UserModel.fromJson(data);
     }
 
     throw const ServerException(

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'package:http/http.dart' as http;
 import '../constants/api_endpoints.dart';
 import '../error/exceptions.dart';
@@ -75,16 +74,21 @@ class ApiClient {
     try {
       final response = await _client
           .get(uri, headers: _buildHeaders(extraHeaders: headers))
-          .timeout(const Duration(seconds: 15));
+          .timeout(const Duration(seconds: 45));
       return _handleResponse(response);
-    } on SocketException catch (_) {
-      throw const NetworkException();
     } on TimeoutException catch (_) {
       throw const NetworkException(
-        message: 'Request timed out. Please check your connection.',
+        message: 'Request timed out while connecting to the server. If using Render, the instance may take ~30s to wake up.',
       );
     } on http.ClientException catch (e) {
-      throw NetworkException(message: e.message);
+      throw NetworkException(
+        message: e.message.contains('Failed to fetch')
+            ? 'Cannot connect to server. The server might be waking up or offline. Please retry in a few seconds or switch server in Settings.'
+            : e.message,
+      );
+    } catch (e) {
+      if (e is AppException) rethrow;
+      throw NetworkException(message: 'Connection failed: $e');
     }
   }
 
@@ -102,16 +106,21 @@ class ApiClient {
             headers: _buildHeaders(extraHeaders: headers),
             body: body != null ? jsonEncode(body) : null,
           )
-          .timeout(const Duration(seconds: 15));
+          .timeout(const Duration(seconds: 45));
       return _handleResponse(response);
-    } on SocketException catch (_) {
-      throw const NetworkException();
     } on TimeoutException catch (_) {
       throw const NetworkException(
-        message: 'Request timed out. Please check your connection.',
+        message: 'Request timed out while connecting to the server. If using Render, the instance may take ~30s to wake up.',
       );
     } on http.ClientException catch (e) {
-      throw NetworkException(message: e.message);
+      throw NetworkException(
+        message: e.message.contains('Failed to fetch')
+            ? 'Cannot connect to server. The server might be waking up or offline. Please retry in a few seconds or switch server in Settings.'
+            : e.message,
+      );
+    } catch (e) {
+      if (e is AppException) rethrow;
+      throw NetworkException(message: 'Connection failed: $e');
     }
   }
 
@@ -129,16 +138,17 @@ class ApiClient {
             headers: _buildHeaders(extraHeaders: headers),
             body: body != null ? jsonEncode(body) : null,
           )
-          .timeout(const Duration(seconds: 15));
+          .timeout(const Duration(seconds: 45));
       return _handleResponse(response);
-    } on SocketException catch (_) {
-      throw const NetworkException();
     } on TimeoutException catch (_) {
       throw const NetworkException(
         message: 'Request timed out. Please check your connection.',
       );
     } on http.ClientException catch (e) {
       throw NetworkException(message: e.message);
+    } catch (e) {
+      if (e is AppException) rethrow;
+      throw NetworkException(message: 'Connection failed: $e');
     }
   }
 
@@ -156,16 +166,17 @@ class ApiClient {
             headers: _buildHeaders(extraHeaders: headers),
             body: body != null ? jsonEncode(body) : null,
           )
-          .timeout(const Duration(seconds: 15));
+          .timeout(const Duration(seconds: 45));
       return _handleResponse(response);
-    } on SocketException catch (_) {
-      throw const NetworkException();
     } on TimeoutException catch (_) {
       throw const NetworkException(
         message: 'Request timed out. Please check your connection.',
       );
     } on http.ClientException catch (e) {
       throw NetworkException(message: e.message);
+    } catch (e) {
+      if (e is AppException) rethrow;
+      throw NetworkException(message: 'Connection failed: $e');
     }
   }
 
@@ -183,16 +194,17 @@ class ApiClient {
             headers: _buildHeaders(extraHeaders: headers),
             body: body != null ? jsonEncode(body) : null,
           )
-          .timeout(const Duration(seconds: 15));
+          .timeout(const Duration(seconds: 45));
       return _handleResponse(response);
-    } on SocketException catch (_) {
-      throw const NetworkException();
     } on TimeoutException catch (_) {
       throw const NetworkException(
         message: 'Request timed out. Please check your connection.',
       );
     } on http.ClientException catch (e) {
       throw NetworkException(message: e.message);
+    } catch (e) {
+      if (e is AppException) rethrow;
+      throw NetworkException(message: 'Connection failed: $e');
     }
   }
 

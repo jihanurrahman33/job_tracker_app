@@ -1,10 +1,17 @@
-class ServerException implements Exception {
+abstract class AppException implements Exception {
   final String message;
+  const AppException({required this.message});
+
+  @override
+  String toString() => message;
+}
+
+class ServerException extends AppException {
   final int? statusCode;
   final dynamic details;
 
   const ServerException({
-    required this.message,
+    required super.message,
     this.statusCode,
     this.details,
   });
@@ -14,11 +21,9 @@ class ServerException implements Exception {
       'ServerException: $message (code: $statusCode, details: $details)';
 }
 
-class NetworkException implements Exception {
-  final String message;
-
+class NetworkException extends AppException {
   const NetworkException({
-    this.message =
+    super.message =
         'Unable to connect to server. Please check your internet connection.',
   });
 
@@ -26,23 +31,20 @@ class NetworkException implements Exception {
   String toString() => 'NetworkException: $message';
 }
 
-class CacheException implements Exception {
-  final String message;
-
+class CacheException extends AppException {
   const CacheException({
-    this.message = 'Cache failure occurred.',
+    super.message = 'Cache failure occurred.',
   });
 
   @override
   String toString() => 'CacheException: $message';
 }
 
-class AuthException implements Exception {
-  final String message;
+class AuthException extends AppException {
   final int? statusCode;
 
   const AuthException({
-    this.message = 'Authentication failed. Please log in again.',
+    super.message = 'Authentication failed. Please log in again.',
     this.statusCode = 401,
   });
 
