@@ -62,16 +62,15 @@ class _ApplicationListScreenState extends State<ApplicationListScreen> {
             icon: const Icon(Icons.tune_rounded),
             tooltip: 'Filter Applications',
             onPressed: () {
-              showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                ),
-                builder: (_) => BlocProvider.value(
-                  value: context.read<ApplicationBloc>(),
-                  child: const ApplicationFilterBottomSheet(),
-                ),
+              ApplicationFilterBottomSheet.show(
+                context,
+                currentStatus:
+                    context.read<ApplicationBloc>().state.selectedStatus,
+                onStatusSelected: (status) {
+                  context
+                      .read<ApplicationBloc>()
+                      .add(FilterStatusChangedEvent(status));
+                },
               );
             },
           ),

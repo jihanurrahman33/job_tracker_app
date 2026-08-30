@@ -129,8 +129,12 @@ class _ApplicationFormScreenState extends State<ApplicationFormScreen> {
         result.fold(
           (failure) => context.showSnackBar(failure.message, isError: true),
           (_) {
-            context.read<ApplicationBloc>().add(const LoadApplicationsEvent(refresh: true));
-            context.read<DashboardBloc>().add(const LoadDashboardDataEvent(refresh: true));
+            context
+                .read<ApplicationBloc>()
+                .add(const LoadApplicationsEvent(refresh: true));
+            context
+                .read<DashboardBloc>()
+                .add(const LoadDashboardDataEvent(refresh: true));
             context.showSnackBar('Application updated successfully!');
             context.pop(true);
           },
@@ -164,8 +168,12 @@ class _ApplicationFormScreenState extends State<ApplicationFormScreen> {
         result.fold(
           (failure) => context.showSnackBar(failure.message, isError: true),
           (_) {
-            context.read<ApplicationBloc>().add(const LoadApplicationsEvent(refresh: true));
-            context.read<DashboardBloc>().add(const LoadDashboardDataEvent(refresh: true));
+            context
+                .read<ApplicationBloc>()
+                .add(const LoadApplicationsEvent(refresh: true));
+            context
+                .read<DashboardBloc>()
+                .add(const LoadDashboardDataEvent(refresh: true));
             context.showSnackBar('Application created successfully!');
             context.pop(true);
           },
@@ -235,14 +243,16 @@ class _ApplicationFormScreenState extends State<ApplicationFormScreen> {
                     children: [
                       const Text(
                         'Pipeline Status *',
-                        style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                        style: TextStyle(
+                            fontSize: 13, fontWeight: FontWeight.w600),
                       ),
                       const SizedBox(height: 6),
                       DropdownButtonFormField<String>(
                         isExpanded: true,
                         initialValue: _selectedStatus,
                         decoration: const InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 10),
                         ),
                         items: AppConstants.applicationStatuses.map((s) {
                           return DropdownMenuItem(
@@ -257,7 +267,8 @@ class _ApplicationFormScreenState extends State<ApplicationFormScreen> {
                         onChanged: _isSubmitting
                             ? null
                             : (val) {
-                                if (val != null) setState(() => _selectedStatus = val);
+                                if (val != null)
+                                  setState(() => _selectedStatus = val);
                               },
                       ),
                     ],
@@ -268,18 +279,22 @@ class _ApplicationFormScreenState extends State<ApplicationFormScreen> {
                     children: [
                       const Text(
                         'Date Applied',
-                        style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                        style: TextStyle(
+                            fontSize: 13, fontWeight: FontWeight.w600),
                       ),
                       const SizedBox(height: 6),
                       InkWell(
                         onTap: _isSubmitting ? null : _selectAppliedDate,
                         child: InputDecorator(
                           decoration: const InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 12),
                             suffixIcon: Icon(Icons.calendar_month, size: 18),
                           ),
                           child: Text(
-                            _appliedAt != null ? _appliedAt!.toShortDate() : 'Select date',
+                            _appliedAt != null
+                                ? _appliedAt!.toShortDate()
+                                : 'Select date',
                             style: const TextStyle(fontSize: 13),
                           ),
                         ),
@@ -308,62 +323,88 @@ class _ApplicationFormScreenState extends State<ApplicationFormScreen> {
               ),
               const SizedBox(height: 16),
               // Salary Range & Currency
-              Row(
-                children: [
-                  Expanded(
-                    child: AppTextFormField(
-                      controller: _salaryMinController,
-                      labelText: 'Min Salary',
-                      hintText: '120000',
-                      keyboardType: TextInputType.number,
-                      validator: Validators.number,
-                      enabled: !_isSubmitting,
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: AppTextFormField(
-                      controller: _salaryMaxController,
-                      labelText: 'Max Salary',
-                      hintText: '160000',
-                      keyboardType: TextInputType.number,
-                      validator: Validators.number,
-                      enabled: !_isSubmitting,
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  SizedBox(
-                    width: 90,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final isCompact = constraints.maxWidth < 450;
+
+                  final salaryInputs = Row(
+                    children: [
+                      Expanded(
+                        child: AppTextFormField(
+                          controller: _salaryMinController,
+                          labelText: 'Min Salary',
+                          hintText: '120000',
+                          keyboardType: TextInputType.number,
+                          validator: Validators.number,
+                          enabled: !_isSubmitting,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: AppTextFormField(
+                          controller: _salaryMaxController,
+                          labelText: 'Max Salary',
+                          hintText: '160000',
+                          keyboardType: TextInputType.number,
+                          validator: Validators.number,
+                          enabled: !_isSubmitting,
+                        ),
+                      ),
+                    ],
+                  );
+
+                  final currencyDropdown = Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Currency',
+                        style: TextStyle(
+                            fontSize: 13, fontWeight: FontWeight.w600),
+                      ),
+                      const SizedBox(height: 6),
+                      DropdownButtonFormField<String>(
+                        isExpanded: true,
+                        initialValue: _selectedCurrency,
+                        decoration: const InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10),
+                        ),
+                        items: AppConstants.supportedCurrencies.map((c) {
+                          return DropdownMenuItem(
+                            value: c,
+                            child:
+                                Text(c, style: const TextStyle(fontSize: 13)),
+                          );
+                        }).toList(),
+                        onChanged: _isSubmitting
+                            ? null
+                            : (val) {
+                                if (val != null)
+                                  setState(() => _selectedCurrency = val);
+                              },
+                      ),
+                    ],
+                  );
+
+                  if (isCompact) {
+                    return Column(
                       children: [
-                        const Text(
-                          'Currency',
-                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-                        ),
-                        const SizedBox(height: 6),
-                        DropdownButtonFormField<String>(
-                          isExpanded: true,
-                          initialValue: _selectedCurrency,
-                          decoration: const InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-                          ),
-                          items: AppConstants.supportedCurrencies.map((c) {
-                            return DropdownMenuItem(
-                              value: c,
-                              child: Text(c, style: const TextStyle(fontSize: 13)),
-                            );
-                          }).toList(),
-                          onChanged: _isSubmitting
-                              ? null
-                              : (val) {
-                                  if (val != null) setState(() => _selectedCurrency = val);
-                                },
-                        ),
+                        salaryInputs,
+                        const SizedBox(height: 12),
+                        currencyDropdown,
                       ],
-                    ),
-                  ),
-                ],
+                    );
+                  }
+
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Expanded(flex: 3, child: salaryInputs),
+                      const SizedBox(width: 10),
+                      SizedBox(width: 95, child: currencyDropdown),
+                    ],
+                  );
+                },
               ),
               const SizedBox(height: 16),
               AppTextFormField(

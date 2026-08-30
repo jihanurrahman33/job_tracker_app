@@ -53,6 +53,7 @@ class _ReminderListScreenState extends State<ReminderListScreen>
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
+        heroTag: 'reminder_fab',
         onPressed: () async {
           final created = await context.push<bool>('/reminders/create');
           if (created == true && mounted) {
