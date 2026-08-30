@@ -17,7 +17,10 @@ class StatisticsRemoteDataSourceImpl implements StatisticsRemoteDataSource {
     final response = await apiClient.get(ApiEndpoints.statistics);
 
     if (response is Map<String, dynamic>) {
-      return StatisticsModel.fromJson(response);
+      final json = (response.containsKey('data') && response['data'] is Map<String, dynamic>)
+          ? response['data'] as Map<String, dynamic>
+          : response;
+      return StatisticsModel.fromJson(json);
     }
 
     throw const ServerException(

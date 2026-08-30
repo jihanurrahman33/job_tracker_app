@@ -90,6 +90,7 @@ class _ApplicationDetailViewState extends State<ApplicationDetailView> {
                 const Text('Select New Pipeline Stage:', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
                 const SizedBox(height: 8),
                 DropdownButtonFormField<String>(
+                  isExpanded: true,
                   initialValue: selectedStatus,
                   items: AppConstants.applicationStatuses.map((s) {
                     return DropdownMenuItem(
@@ -177,25 +178,22 @@ class _ApplicationDetailViewState extends State<ApplicationDetailView> {
           }
         },
         builder: (context, state) {
-          if (state.status == ApplicationDetailStatus.loading &&
-              state.application == null) {
-            return const LoadingIndicator(message: 'Loading details...');
-          }
-
-          if (state.status == ApplicationDetailStatus.error &&
-              state.application == null) {
-            return EmptyStateWidget(
-              icon: Icons.error_outline,
-              title: 'Could not load application',
-              description: state.errorMessage ?? 'Please check your connection and retry.',
-              actionText: 'Retry',
-              isError: true,
-              onAction: () {
-                context
-                    .read<ApplicationDetailBloc>()
-                    .add(LoadApplicationDetailEvent(widget.applicationId));
-              },
-            );
+          if (state.application == null) {
+            if (state.status == ApplicationDetailStatus.error) {
+              return EmptyStateWidget(
+                icon: Icons.error_outline,
+                title: 'Could not load application',
+                description: state.errorMessage ?? 'Please check your connection and retry.',
+                actionText: 'Retry',
+                isError: true,
+                onAction: () {
+                  context
+                      .read<ApplicationDetailBloc>()
+                      .add(LoadApplicationDetailEvent(widget.applicationId));
+                },
+              );
+            }
+            return const LoadingIndicator(message: 'Loading application details...');
           }
 
           final app = state.application!;

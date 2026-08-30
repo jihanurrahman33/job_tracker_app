@@ -60,7 +60,10 @@ class InterviewRemoteDataSourceImpl implements InterviewRemoteDataSource {
     final response = await apiClient.get(ApiEndpoints.interviewById(id));
 
     if (response is Map<String, dynamic>) {
-      return InterviewModel.fromJson(response);
+      final json = (response.containsKey('data') && response['data'] is Map<String, dynamic>)
+          ? response['data'] as Map<String, dynamic>
+          : response;
+      return InterviewModel.fromJson(json);
     }
 
     throw const ServerException(message: 'Failed to fetch interview details.');
@@ -98,7 +101,10 @@ class InterviewRemoteDataSourceImpl implements InterviewRemoteDataSource {
     );
 
     if (response is Map<String, dynamic>) {
-      return InterviewModel.fromJson(response);
+      final json = (response.containsKey('data') && response['data'] is Map<String, dynamic>)
+          ? response['data'] as Map<String, dynamic>
+          : response;
+      return InterviewModel.fromJson(json);
     }
 
     throw const ServerException(message: 'Failed to create interview.');
@@ -131,7 +137,10 @@ class InterviewRemoteDataSourceImpl implements InterviewRemoteDataSource {
     );
 
     if (response is Map<String, dynamic>) {
-      return InterviewModel.fromJson(response);
+      final json = (response.containsKey('data') && response['data'] is Map<String, dynamic>)
+          ? response['data'] as Map<String, dynamic>
+          : response;
+      return InterviewModel.fromJson(json);
     }
 
     throw const ServerException(message: 'Failed to update interview.');

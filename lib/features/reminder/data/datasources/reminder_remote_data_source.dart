@@ -74,7 +74,10 @@ class ReminderRemoteDataSourceImpl implements ReminderRemoteDataSource {
     );
 
     if (response is Map<String, dynamic>) {
-      return ReminderModel.fromJson(response);
+      final json = (response.containsKey('data') && response['data'] is Map<String, dynamic>)
+          ? response['data'] as Map<String, dynamic>
+          : response;
+      return ReminderModel.fromJson(json);
     }
 
     throw const ServerException(message: 'Failed to create reminder.');
@@ -92,8 +95,9 @@ class ReminderRemoteDataSourceImpl implements ReminderRemoteDataSource {
 
     if (title != null) body['title'] = title.trim();
     if (description != null) body['description'] = description.trim();
-    if (remindAt != null)
+    if (remindAt != null) {
       body['remind_at'] = remindAt.toUtc().toIso8601String();
+    }
     if (completed != null) body['completed'] = completed;
 
     final response = await apiClient.patch(
@@ -102,7 +106,10 @@ class ReminderRemoteDataSourceImpl implements ReminderRemoteDataSource {
     );
 
     if (response is Map<String, dynamic>) {
-      return ReminderModel.fromJson(response);
+      final json = (response.containsKey('data') && response['data'] is Map<String, dynamic>)
+          ? response['data'] as Map<String, dynamic>
+          : response;
+      return ReminderModel.fromJson(json);
     }
 
     throw const ServerException(message: 'Failed to update reminder.');

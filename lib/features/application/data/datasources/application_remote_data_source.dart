@@ -82,10 +82,14 @@ class ApplicationRemoteDataSourceImpl implements ApplicationRemoteDataSource {
     );
 
     if (response is Map<String, dynamic>) {
-      final dataList = response['data'] as List<dynamic>? ?? [];
+      final dataList = (response['data'] is List<dynamic>)
+          ? response['data'] as List<dynamic>
+          : (response['applications'] is List<dynamic>
+              ? response['applications'] as List<dynamic>
+              : <dynamic>[]);
+
       final applications = dataList
-          .map(
-              (json) => ApplicationModel.fromJson(json as Map<String, dynamic>))
+          .map((json) => ApplicationModel.fromJson(json as Map<String, dynamic>))
           .toList();
 
       final metaJson = response['meta'] as Map<String, dynamic>? ??
@@ -108,7 +112,10 @@ class ApplicationRemoteDataSourceImpl implements ApplicationRemoteDataSource {
     final response = await apiClient.get(ApiEndpoints.applicationById(id));
 
     if (response is Map<String, dynamic>) {
-      return ApplicationModel.fromJson(response);
+      final json = (response.containsKey('data') && response['data'] is Map<String, dynamic>)
+          ? response['data'] as Map<String, dynamic>
+          : response;
+      return ApplicationModel.fromJson(json);
     }
 
     throw const ServerException(
@@ -156,7 +163,10 @@ class ApplicationRemoteDataSourceImpl implements ApplicationRemoteDataSource {
     );
 
     if (response is Map<String, dynamic>) {
-      return ApplicationModel.fromJson(response);
+      final json = (response.containsKey('data') && response['data'] is Map<String, dynamic>)
+          ? response['data'] as Map<String, dynamic>
+          : response;
+      return ApplicationModel.fromJson(json);
     }
 
     throw const ServerException(message: 'Failed to create application.');
@@ -197,7 +207,10 @@ class ApplicationRemoteDataSourceImpl implements ApplicationRemoteDataSource {
     );
 
     if (response is Map<String, dynamic>) {
-      return ApplicationModel.fromJson(response);
+      final json = (response.containsKey('data') && response['data'] is Map<String, dynamic>)
+          ? response['data'] as Map<String, dynamic>
+          : response;
+      return ApplicationModel.fromJson(json);
     }
 
     throw const ServerException(message: 'Failed to update application.');
