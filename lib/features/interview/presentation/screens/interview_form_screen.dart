@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:job_tracker/core/extensions/string_extensions.dart';
 import 'package:job_tracker/features/dashboard/presentation/bloc/dashboard_bloc.dart';
 import 'package:job_tracker/features/dashboard/presentation/bloc/dashboard_event.dart';
 import 'package:job_tracker/features/interview/presentation/bloc/interview_bloc.dart';
@@ -199,11 +200,16 @@ class _InterviewFormScreenState extends State<InterviewFormScreen> {
                   ),
                   const SizedBox(height: 6),
                   DropdownButtonFormField<String>(
+                    isExpanded: true,
                     initialValue: _selectedType,
                     items: AppConstants.interviewTypes.map((t) {
                       return DropdownMenuItem(
                         value: t,
-                        child: Text(t, style: const TextStyle(fontSize: 13)),
+                        child: Text(
+                          t.toTitleCaseFromSnake(),
+                          style: const TextStyle(fontSize: 13),
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       );
                     }).toList(),
                     onChanged: _isSubmitting

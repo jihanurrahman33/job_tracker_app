@@ -9,6 +9,7 @@ import 'package:job_tracker/features/dashboard/presentation/bloc/dashboard_event
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/extensions/date_extensions.dart';
+import '../../../../core/extensions/string_extensions.dart';
 import '../../../../core/utils/validators.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_text_form_field.dart';
@@ -225,73 +226,91 @@ class _ApplicationFormScreenState extends State<ApplicationFormScreen> {
               ),
               const SizedBox(height: 16),
               // Status & Applied Date
-              Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text('Pipeline Status *',
-                            style: TextStyle(
-                                fontSize: 13, fontWeight: FontWeight.w600)),
-                        const SizedBox(height: 6),
-                        DropdownButtonFormField<String>(
-                          initialValue: _selectedStatus,
-                          decoration: const InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 10)),
-                          items: AppConstants.applicationStatuses.map((s) {
-                            return DropdownMenuItem(
-                                value: s,
-                                child: Text(s,
-                                    style: const TextStyle(fontSize: 13)));
-                          }).toList(),
-                          onChanged: _isSubmitting
-                              ? null
-                              : (val) {
-                                  if (val != null)
-                                    setState(() => _selectedStatus = val);
-                                },
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final isCompact = constraints.maxWidth < 420;
+
+                  final statusWidget = Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Pipeline Status *',
+                        style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                      ),
+                      const SizedBox(height: 6),
+                      DropdownButtonFormField<String>(
+                        isExpanded: true,
+                        initialValue: _selectedStatus,
+                        decoration: const InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                         ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text('Date Applied',
-                            style: TextStyle(
-                                fontSize: 13, fontWeight: FontWeight.w600)),
-                        const SizedBox(height: 6),
-                        InkWell(
-                          onTap: _isSubmitting ? null : _selectAppliedDate,
-                          child: InputDecorator(
-                            decoration: const InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 14),
-                              suffixIcon: Icon(Icons.calendar_month, size: 18),
-                            ),
+                        items: AppConstants.applicationStatuses.map((s) {
+                          return DropdownMenuItem(
+                            value: s,
                             child: Text(
-                              _appliedAt != null
-                                  ? _appliedAt!.toShortDate()
-                                  : 'Select date',
+                              s.toTitleCaseFromSnake(),
                               style: const TextStyle(fontSize: 13),
+                              overflow: TextOverflow.ellipsis,
                             ),
+                          );
+                        }).toList(),
+                        onChanged: _isSubmitting
+                            ? null
+                            : (val) {
+                                if (val != null) setState(() => _selectedStatus = val);
+                              },
+                      ),
+                    ],
+                  );
+
+                  final dateWidget = Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Date Applied',
+                        style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                      ),
+                      const SizedBox(height: 6),
+                      InkWell(
+                        onTap: _isSubmitting ? null : _selectAppliedDate,
+                        child: InputDecorator(
+                          decoration: const InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                            suffixIcon: Icon(Icons.calendar_month, size: 18),
+                          ),
+                          child: Text(
+                            _appliedAt != null ? _appliedAt!.toShortDate() : 'Select date',
+                            style: const TextStyle(fontSize: 13),
                           ),
                         ),
+                      ),
+                    ],
+                  );
+
+                  if (isCompact) {
+                    return Column(
+                      children: [
+                        statusWidget,
+                        const SizedBox(height: 16),
+                        dateWidget,
                       ],
-                    ),
-                  ),
-                ],
+                    );
+                  }
+
+                  return Row(
+                    children: [
+                      Expanded(child: statusWidget),
+                      const SizedBox(width: 12),
+                      Expanded(child: dateWidget),
+                    ],
+                  );
+                },
               ),
               const SizedBox(height: 16),
               // Salary Range & Currency
               Row(
                 children: [
                   Expanded(
-                    flex: 2,
                     child: AppTextFormField(
                       controller: _salaryMinController,
                       labelText: 'Min Salary',
@@ -301,9 +320,8 @@ class _ApplicationFormScreenState extends State<ApplicationFormScreen> {
                       enabled: !_isSubmitting,
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: 10),
                   Expanded(
-                    flex: 2,
                     child: AppTextFormField(
                       controller: _salaryMaxController,
                       labelText: 'Max Salary',
@@ -313,32 +331,33 @@ class _ApplicationFormScreenState extends State<ApplicationFormScreen> {
                       enabled: !_isSubmitting,
                     ),
                   ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    flex: 2,
+                  const SizedBox(width: 10),
+                  SizedBox(
+                    width: 90,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text('Currency',
-                            style: TextStyle(
-                                fontSize: 13, fontWeight: FontWeight.w600)),
+                        const Text(
+                          'Currency',
+                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                        ),
                         const SizedBox(height: 6),
                         DropdownButtonFormField<String>(
+                          isExpanded: true,
                           initialValue: _selectedCurrency,
                           decoration: const InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 10)),
+                            contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+                          ),
                           items: AppConstants.supportedCurrencies.map((c) {
                             return DropdownMenuItem(
-                                value: c,
-                                child: Text(c,
-                                    style: const TextStyle(fontSize: 13)));
+                              value: c,
+                              child: Text(c, style: const TextStyle(fontSize: 13)),
+                            );
                           }).toList(),
                           onChanged: _isSubmitting
                               ? null
                               : (val) {
-                                  if (val != null)
-                                    setState(() => _selectedCurrency = val);
+                                  if (val != null) setState(() => _selectedCurrency = val);
                                 },
                         ),
                       ],
@@ -361,6 +380,7 @@ class _ApplicationFormScreenState extends State<ApplicationFormScreen> {
                 isLoading: _isSubmitting,
                 onPressed: _submitForm,
               ),
+              const SizedBox(height: 32),
             ],
           ),
         ),
