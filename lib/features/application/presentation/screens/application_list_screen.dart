@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:job_tracker/features/dashboard/presentation/bloc/dashboard_bloc.dart';
+import 'package:job_tracker/features/dashboard/presentation/bloc/dashboard_event.dart';
 import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/extensions/string_extensions.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -60,32 +62,32 @@ class _ApplicationListScreenState extends State<ApplicationListScreen> {
             icon: const Icon(Icons.tune_rounded),
             tooltip: 'Filter Applications',
             onPressed: () {
-              final currentStatus =
-                  context.read<ApplicationBloc>().state.selectedStatus;
-              ApplicationFilterBottomSheet.show(
-                context,
-                currentStatus: currentStatus,
-                onStatusSelected: (status) {
-                  context
-                      .read<ApplicationBloc>()
-                      .add(FilterStatusChangedEvent(status));
-                },
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                ),
+                builder: (_) => BlocProvider.value(
+                  value: context.read<ApplicationBloc>(),
+                  child: const ApplicationFilterBottomSheet(),
+                ),
               );
             },
           ),
+          IconButton(
+            icon: const Icon(Icons.add_rounded),
+            tooltip: 'New Application',
+            onPressed: () async {
+              final created = await context.push<bool>('/applications/create');
+              if (created == true && mounted) {
+                context
+                    .read<ApplicationBloc>()
+                    .add(const LoadApplicationsEvent(refresh: true));
+              }
+            },
+          ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () async {
-          final created = await context.push<bool>('/applications/create');
-          if (created == true && mounted) {
-            context
-                .read<ApplicationBloc>()
-                .add(const LoadApplicationsEvent(refresh: true));
-          }
-        },
-        icon: const Icon(Icons.add),
-        label: const Text('Add Application'),
       ),
       body: BlocConsumer<ApplicationBloc, ApplicationState>(
         listener: (context, state) {
@@ -96,7 +98,7 @@ class _ApplicationListScreenState extends State<ApplicationListScreen> {
         builder: (context, state) {
           return Column(
             children: [
-              // Search & Active Filter Bar
+              // Search & Filter Header
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
                 child: Column(
@@ -104,11 +106,11 @@ class _ApplicationListScreenState extends State<ApplicationListScreen> {
                     TextField(
                       controller: _searchController,
                       decoration: InputDecoration(
-                        hintText: 'Search by role, company, or location...',
-                        prefixIcon: const Icon(Icons.search, size: 20),
+                        hintText: 'Search company, position...',
+                        prefixIcon: const Icon(Icons.search_rounded, size: 20),
                         suffixIcon: _searchController.text.isNotEmpty
                             ? IconButton(
-                                icon: const Icon(Icons.clear, size: 18),
+                                icon: const Icon(Icons.clear_rounded, size: 18),
                                 onPressed: () {
                                   _searchController.clear();
                                   context
@@ -117,6 +119,8 @@ class _ApplicationListScreenState extends State<ApplicationListScreen> {
                                 },
                               )
                             : null,
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 12),
                       ),
                       onChanged: (val) {
                         context
@@ -128,24 +132,20 @@ class _ApplicationListScreenState extends State<ApplicationListScreen> {
                       const SizedBox(height: 8),
                       Row(
                         children: [
-                          Text(
-                            'Filtered by: ',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: theme.colorScheme.onSurface
-                                  .withValues(alpha: 0.6),
-                            ),
-                          ),
+                          Text('Filtered by:',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: theme.colorScheme.onSurface
+                                    .withValues(alpha: 0.6),
+                              )),
+                          const SizedBox(width: 8),
                           Chip(
                             label: Text(
                               state.selectedStatus!.toTitleCaseFromSnake(),
-                              style: const TextStyle(
-                                  fontSize: 12, fontWeight: FontWeight.bold),
+                              style: const TextStyle(fontSize: 12),
                             ),
-                            backgroundColor:
-                                AppColors.getStatusColor(state.selectedStatus!)
-                                    .withValues(alpha: 0.15),
-                            deleteIcon: const Icon(Icons.close, size: 14),
+                            deleteIcon:
+                                const Icon(Icons.close_rounded, size: 14),
                             onDeleted: () {
                               context
                                   .read<ApplicationBloc>()
@@ -268,8 +268,12 @@ class _ApplicationListScreenState extends State<ApplicationListScreen> {
                             ),
                             child: ApplicationCardWidget(
                               application: application,
-                              onTap: () {
-                                context.push('/applications/${application.id}');
+                              onTap: () async {
+                                await context.push('/applications/${application.id}');
+                                if (context.mounted) {
+                                  context.read<ApplicationBloc>().add(const LoadApplicationsEvent(refresh: true));
+                                  context.read<DashboardBloc>().add(const LoadDashboardDataEvent(refresh: true));
+                                }
                               },
                             ),
                           );

@@ -18,6 +18,17 @@ class ApplicationBloc extends Bloc<ApplicationEvent, ApplicationState> {
     on<SearchQueryChangedEvent>(_onSearchQueryChanged);
     on<SortOptionChangedEvent>(_onSortOptionChanged);
     on<DeleteApplicationItemEvent>(_onDeleteApplicationItem);
+    on<ApplicationUpdatedInListEvent>(_onApplicationUpdatedInList);
+  }
+
+  void _onApplicationUpdatedInList(
+    ApplicationUpdatedInListEvent event,
+    Emitter<ApplicationState> emit,
+  ) {
+    final updatedList = state.applications.map((app) {
+      return app.id == event.application.id ? event.application : app;
+    }).toList();
+    emit(state.copyWith(applications: updatedList));
   }
 
   Future<void> _onLoadApplications(

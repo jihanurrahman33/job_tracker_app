@@ -174,6 +174,12 @@ class _ApplicationDetailViewState extends State<ApplicationDetailView> {
                     context
                         .read<ApplicationDetailBloc>()
                         .add(LoadApplicationDetailEvent(widget.applicationId));
+                    context
+                        .read<ApplicationBloc>()
+                        .add(const LoadApplicationsEvent(refresh: true));
+                    context
+                        .read<DashboardBloc>()
+                        .add(const LoadDashboardDataEvent(refresh: true));
                   }
                 },
               );
@@ -185,6 +191,9 @@ class _ApplicationDetailViewState extends State<ApplicationDetailView> {
         listener: (context, state) {
           if (state.errorMessage != null) {
             context.showSnackBar(state.errorMessage!, isError: true);
+          }
+          if (state.status == ApplicationDetailStatus.loaded && state.application != null) {
+            context.read<ApplicationBloc>().add(ApplicationUpdatedInListEvent(state.application!));
           }
         },
         builder: (context, state) {

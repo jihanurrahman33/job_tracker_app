@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import '../../domain/entities/application_entity.dart';
 
 abstract class ApplicationEvent extends Equatable {
   const ApplicationEvent();
@@ -49,4 +50,12 @@ class DeleteApplicationItemEvent extends ApplicationEvent {
 
   @override
   List<Object?> get props => [id];
+}
+
+class ApplicationUpdatedInListEvent extends ApplicationEvent {
+  final ApplicationEntity application;
+  const ApplicationUpdatedInListEvent(this.application);
+
+  @override
+  List<Object?> get props => [application];
 }
