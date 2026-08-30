@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:job_tracker/features/application/presentation/bloc/application_bloc.dart';
+import 'package:job_tracker/features/application/presentation/bloc/application_event.dart';
+import 'package:job_tracker/features/dashboard/presentation/bloc/dashboard_bloc.dart';
+import 'package:job_tracker/features/dashboard/presentation/bloc/dashboard_event.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/extensions/date_extensions.dart';
@@ -123,6 +128,8 @@ class _ApplicationFormScreenState extends State<ApplicationFormScreen> {
         result.fold(
           (failure) => context.showSnackBar(failure.message, isError: true),
           (_) {
+            context.read<ApplicationBloc>().add(const LoadApplicationsEvent(refresh: true));
+            context.read<DashboardBloc>().add(const LoadDashboardDataEvent(refresh: true));
             context.showSnackBar('Application updated successfully!');
             context.pop(true);
           },
@@ -156,6 +163,8 @@ class _ApplicationFormScreenState extends State<ApplicationFormScreen> {
         result.fold(
           (failure) => context.showSnackBar(failure.message, isError: true),
           (_) {
+            context.read<ApplicationBloc>().add(const LoadApplicationsEvent(refresh: true));
+            context.read<DashboardBloc>().add(const LoadDashboardDataEvent(refresh: true));
             context.showSnackBar('Application created successfully!');
             context.pop(true);
           },

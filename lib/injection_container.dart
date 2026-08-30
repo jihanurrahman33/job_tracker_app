@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
+import 'package:job_tracker/core/constants/api_endpoints.dart';
 import 'package:job_tracker/core/networking/api_client.dart';
 import 'package:job_tracker/features/application/di.dart';
 import 'package:job_tracker/features/auth/di.dart';
@@ -16,9 +17,18 @@ Future<void> initDependencies() async {
   sl.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
   sl.registerLazySingleton<http.Client>(() => http.Client());
 
-  sl.registerLazySingleton<ApiClient>(
-    () => ApiClient(client: sl<http.Client>()),
+  final savedToken = sharedPreferences.getString(ApiEndpoints.authTokenStorageKey);
+  final savedBaseUrl = sharedPreferences.getString(ApiEndpoints.baseUrlStorageKey) ?? ApiEndpoints.defaultBaseUrl;
+
+  final apiClient = ApiClient(
+    client: sl<http.Client>(),
+    baseUrl: savedBaseUrl,
   );
+  if (savedToken != null && savedToken.isNotEmpty) {
+    apiClient.setAuthToken(savedToken);
+  }
+
+  sl.registerLazySingleton<ApiClient>(() => apiClient);
 
   initAuthFeature(sl);
   initApplicationFeature(sl);

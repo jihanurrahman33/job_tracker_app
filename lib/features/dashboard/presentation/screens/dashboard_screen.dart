@@ -131,7 +131,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       );
                     },
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 14),
                   Row(
                     children: [
                       Expanded(
@@ -142,7 +142,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           color: AppColors.statusApplied,
                         ),
                       ),
-                      const SizedBox(width: 8),
+                      const SizedBox(width: 6),
                       Expanded(
                         child: RateMetricCard(
                           title: 'Interview Rate',
@@ -151,7 +151,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           color: AppColors.statusInterview,
                         ),
                       ),
-                      const SizedBox(width: 8),
+                      const SizedBox(width: 6),
                       Expanded(
                         child: RateMetricCard(
                           title: 'Offer Rate',
@@ -162,7 +162,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 14),
                   StatusBreakdownCard(
                     byStatus: byStatus,
                     totalApplications: totalApps,
@@ -173,7 +173,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       context.go('/applications');
                     },
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 14),
                   Card(
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),

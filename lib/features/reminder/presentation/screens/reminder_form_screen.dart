@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../core/extensions/context_extensions.dart';
-import '../../../../core/extensions/date_extensions.dart';
-import '../../../../core/utils/validators.dart';
-import '../../../../core/widgets/app_button.dart';
-import '../../../../core/widgets/app_text_form_field.dart';
-import '../../../../core/widgets/responsive_scaffold.dart';
+import 'package:job_tracker/core/extensions/context_extensions.dart';
+import 'package:job_tracker/core/extensions/date_extensions.dart';
+import 'package:job_tracker/core/utils/validators.dart';
+import 'package:job_tracker/core/widgets/app_button.dart';
+import 'package:job_tracker/core/widgets/app_text_form_field.dart';
+import 'package:job_tracker/core/widgets/responsive_scaffold.dart';
+import 'package:job_tracker/features/dashboard/presentation/bloc/dashboard_bloc.dart';
+import 'package:job_tracker/features/dashboard/presentation/bloc/dashboard_event.dart';
+import 'package:job_tracker/features/reminder/presentation/bloc/reminder_bloc.dart';
+import 'package:job_tracker/features/reminder/presentation/bloc/reminder_event.dart';
 import '../../domain/entities/reminder_entity.dart';
 import '../../domain/usecases/create_reminder_usecase.dart';
 import '../../domain/usecases/update_reminder_usecase.dart';
@@ -40,14 +45,14 @@ class _ReminderFormScreenState extends State<ReminderFormScreen> {
   @override
   void initState() {
     super.initState();
-    final rem = widget.reminder;
+    final item = widget.reminder;
 
     _titleController = TextEditingController(
-      text: rem?.title ?? widget.initialTitle ?? '',
+      text: item?.title ?? widget.initialTitle ?? '',
     );
     _descriptionController =
-        TextEditingController(text: rem?.description ?? '');
-    _remindAt = rem?.remindAt ?? DateTime.now().add(const Duration(days: 2));
+        TextEditingController(text: item?.description ?? '');
+    _remindAt = item?.remindAt ?? DateTime.now().add(const Duration(days: 3));
   }
 
   @override
@@ -61,7 +66,7 @@ class _ReminderFormScreenState extends State<ReminderFormScreen> {
     final date = await showDatePicker(
       context: context,
       initialDate: _remindAt,
-      firstDate: DateTime.now(),
+      firstDate: DateTime(2020),
       lastDate: DateTime.now().add(const Duration(days: 365)),
     );
 
@@ -71,7 +76,7 @@ class _ReminderFormScreenState extends State<ReminderFormScreen> {
         initialTime: TimeOfDay.fromDateTime(_remindAt),
       );
 
-      if (time != null) {
+      if (time != null && mounted) {
         setState(() {
           _remindAt = DateTime(
             date.year,
@@ -108,6 +113,8 @@ class _ReminderFormScreenState extends State<ReminderFormScreen> {
         result.fold(
           (failure) => context.showSnackBar(failure.message, isError: true),
           (_) {
+            context.read<ReminderBloc>().add(const LoadRemindersEvent(refresh: true));
+            context.read<DashboardBloc>().add(const LoadDashboardDataEvent(refresh: true));
             context.showSnackBar('Reminder updated!');
             context.pop(true);
           },
@@ -131,6 +138,8 @@ class _ReminderFormScreenState extends State<ReminderFormScreen> {
         result.fold(
           (failure) => context.showSnackBar(failure.message, isError: true),
           (_) {
+            context.read<ReminderBloc>().add(const LoadRemindersEvent(refresh: true));
+            context.read<DashboardBloc>().add(const LoadDashboardDataEvent(refresh: true));
             context.showSnackBar('Reminder created!');
             context.pop(true);
           },
@@ -167,7 +176,7 @@ class _ReminderFormScreenState extends State<ReminderFormScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    'Remind At *',
+                    'Due Date & Time *',
                     style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(height: 6),
@@ -176,13 +185,12 @@ class _ReminderFormScreenState extends State<ReminderFormScreen> {
                     child: InputDecorator(
                       decoration: const InputDecoration(
                         contentPadding:
-                            EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                        suffixIcon: Icon(Icons.access_time_rounded, size: 20),
+                            EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                        suffixIcon: Icon(Icons.alarm_rounded, size: 20),
                       ),
                       child: Text(
                         _remindAt.toDateTimeString(),
-                        style: const TextStyle(
-                            fontSize: 14, fontWeight: FontWeight.w500),
+                        style: const TextStyle(fontSize: 14),
                       ),
                     ),
                   ),
@@ -191,15 +199,14 @@ class _ReminderFormScreenState extends State<ReminderFormScreen> {
               const SizedBox(height: 16),
               AppTextFormField(
                 controller: _descriptionController,
-                labelText: 'Notes / Description',
-                hintText:
-                    'Add context, email drafted, or specific questions to ask...',
-                maxLines: 4,
+                labelText: 'Description / Notes',
+                hintText: 'Additional details or context for this reminder...',
+                maxLines: 3,
                 enabled: !_isSubmitting,
               ),
               const SizedBox(height: 28),
               AppButton(
-                text: isEditMode ? 'Save Changes' : 'Create Reminder',
+                text: isEditMode ? 'Update Reminder' : 'Create Reminder',
                 isLoading: _isSubmitting,
                 onPressed: _submitForm,
               ),

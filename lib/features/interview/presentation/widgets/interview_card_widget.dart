@@ -24,7 +24,7 @@ class InterviewCardWidget extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(16),
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(14.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -35,38 +35,43 @@ class InterviewCardWidget extends StatelessWidget {
                     status: interview.type,
                     isInterviewType: true,
                   ),
-                  Text(
-                    interview.scheduledAt.toDateTimeString(),
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: theme.colorScheme.primary,
+                  const SizedBox(width: 8),
+                  Flexible(
+                    child: Text(
+                      interview.scheduledAt.toDateTimeString(),
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        color: theme.colorScheme.primary,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 10),
               Row(
                 children: [
                   Icon(
                     Icons.timer_outlined,
-                    size: 14,
+                    size: 13,
                     color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                   ),
                   const SizedBox(width: 4),
                   Text(
                     interview.formattedDuration,
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 11,
                       color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                     ),
                   ),
                   if (interview.location != null &&
                       interview.location!.isNotEmpty) ...[
-                    const SizedBox(width: 16),
+                    const SizedBox(width: 12),
                     Icon(
                       Icons.location_on_outlined,
-                      size: 14,
+                      size: 13,
                       color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                     ),
                     const SizedBox(width: 4),
@@ -74,7 +79,7 @@ class InterviewCardWidget extends StatelessWidget {
                       child: Text(
                         interview.location!,
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: 11,
                           color: theme.colorScheme.onSurface
                               .withValues(alpha: 0.7),
                         ),
@@ -92,7 +97,7 @@ class InterviewCardWidget extends StatelessWidget {
                   children: [
                     const Icon(
                       Icons.videocam_outlined,
-                      size: 14,
+                      size: 13,
                       color: Colors.teal,
                     ),
                     const SizedBox(width: 4),
@@ -100,7 +105,7 @@ class InterviewCardWidget extends StatelessWidget {
                       child: Text(
                         interview.meetingUrl!,
                         style: const TextStyle(
-                          fontSize: 12,
+                          fontSize: 11,
                           color: Colors.teal,
                           decoration: TextDecoration.underline,
                         ),

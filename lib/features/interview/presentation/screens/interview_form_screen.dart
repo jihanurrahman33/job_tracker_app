@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:job_tracker/features/dashboard/presentation/bloc/dashboard_bloc.dart';
+import 'package:job_tracker/features/dashboard/presentation/bloc/dashboard_event.dart';
+import 'package:job_tracker/features/interview/presentation/bloc/interview_bloc.dart';
+import 'package:job_tracker/features/interview/presentation/bloc/interview_event.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/extensions/date_extensions.dart';
@@ -42,21 +47,17 @@ class _InterviewFormScreenState extends State<InterviewFormScreen> {
   @override
   void initState() {
     super.initState();
-    final interview = widget.interview;
+    final item = widget.interview;
 
-    _selectedType = interview?.type ?? 'TECHNICAL';
+    _selectedType = item?.type ?? 'SCREENING';
     _scheduledAt =
-        interview?.scheduledAt ?? DateTime.now().add(const Duration(days: 1));
+        item?.scheduledAt ?? DateTime.now().add(const Duration(days: 2));
     _durationController = TextEditingController(
-      text: interview?.durationMinutes != null
-          ? interview!.durationMinutes.toString()
-          : '45',
+      text: item?.durationMinutes != null ? item!.durationMinutes.toString() : '45',
     );
-    _locationController =
-        TextEditingController(text: interview?.location ?? '');
-    _meetingUrlController =
-        TextEditingController(text: interview?.meetingUrl ?? '');
-    _notesController = TextEditingController(text: interview?.notes ?? '');
+    _locationController = TextEditingController(text: item?.location ?? '');
+    _meetingUrlController = TextEditingController(text: item?.meetingUrl ?? '');
+    _notesController = TextEditingController(text: item?.notes ?? '');
   }
 
   @override
@@ -72,7 +73,7 @@ class _InterviewFormScreenState extends State<InterviewFormScreen> {
     final date = await showDatePicker(
       context: context,
       initialDate: _scheduledAt,
-      firstDate: DateTime.now().subtract(const Duration(days: 30)),
+      firstDate: DateTime(2020),
       lastDate: DateTime.now().add(const Duration(days: 365)),
     );
 
@@ -82,7 +83,7 @@ class _InterviewFormScreenState extends State<InterviewFormScreen> {
         initialTime: TimeOfDay.fromDateTime(_scheduledAt),
       );
 
-      if (time != null) {
+      if (time != null && mounted) {
         setState(() {
           _scheduledAt = DateTime(
             date.year,
@@ -128,6 +129,10 @@ class _InterviewFormScreenState extends State<InterviewFormScreen> {
         result.fold(
           (failure) => context.showSnackBar(failure.message, isError: true),
           (_) {
+            try {
+              context.read<InterviewBloc>().add(LoadInterviewsForAppEvent(widget.applicationId));
+            } catch (_) {}
+            context.read<DashboardBloc>().add(const LoadDashboardDataEvent(refresh: true));
             context.showSnackBar('Interview round updated!');
             context.pop(true);
           },
@@ -158,7 +163,11 @@ class _InterviewFormScreenState extends State<InterviewFormScreen> {
         result.fold(
           (failure) => context.showSnackBar(failure.message, isError: true),
           (_) {
-            context.showSnackBar('Interview round scheduled!');
+            try {
+              context.read<InterviewBloc>().add(LoadInterviewsForAppEvent(widget.applicationId));
+            } catch (_) {}
+            context.read<DashboardBloc>().add(const LoadDashboardDataEvent(refresh: true));
+            context.showSnackBar('Interview scheduled successfully!');
             context.pop(true);
           },
         );
@@ -171,8 +180,7 @@ class _InterviewFormScreenState extends State<InterviewFormScreen> {
     return ResponsiveScaffold(
       maxWidth: 600,
       appBar: AppBar(
-        title: Text(
-            isEditMode ? 'Edit Interview Round' : 'Schedule Interview Round'),
+        title: Text(isEditMode ? 'Edit Interview' : 'Schedule Interview'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
@@ -181,36 +189,40 @@ class _InterviewFormScreenState extends State<InterviewFormScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Interview Type Dropdown
+              // Round Type
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    'Interview Round Type *',
+                    'Interview Type / Round *',
                     style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(height: 6),
                   DropdownButtonFormField<String>(
                     initialValue: _selectedType,
                     items: AppConstants.interviewTypes.map((t) {
-                      return DropdownMenuItem(value: t, child: Text(t));
+                      return DropdownMenuItem(
+                        value: t,
+                        child: Text(t, style: const TextStyle(fontSize: 13)),
+                      );
                     }).toList(),
                     onChanged: _isSubmitting
                         ? null
                         : (val) {
-                            if (val != null)
+                            if (val != null) {
                               setState(() => _selectedType = val);
+                            }
                           },
                   ),
                 ],
               ),
               const SizedBox(height: 16),
-              // Date & Time Picker
+              // Scheduled Date & Time
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    'Date & Time *',
+                    'Scheduled Date & Time *',
                     style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(height: 6),
@@ -218,9 +230,9 @@ class _InterviewFormScreenState extends State<InterviewFormScreen> {
                     onTap: _isSubmitting ? null : _selectDateTime,
                     child: InputDecorator(
                       decoration: const InputDecoration(
-                        suffixIcon: Icon(Icons.access_time_rounded, size: 20),
                         contentPadding:
-                            EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                            EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                        suffixIcon: Icon(Icons.event_rounded, size: 20),
                       ),
                       child: Text(
                         _scheduledAt.toDateTimeString(),
@@ -237,38 +249,37 @@ class _InterviewFormScreenState extends State<InterviewFormScreen> {
                 hintText: '45',
                 keyboardType: TextInputType.number,
                 prefixIcon: const Icon(Icons.timer_outlined, size: 20),
-                validator: (val) => Validators.number(val, optional: false),
+                validator: Validators.number,
                 enabled: !_isSubmitting,
               ),
               const SizedBox(height: 16),
               AppTextFormField(
                 controller: _locationController,
                 labelText: 'Location / Platform',
-                hintText: 'e.g. Google Meet, Zoom, On-site (Building 4)',
+                hintText: 'e.g. Google Meet, Zoom, Onsite (NY HQ)',
                 prefixIcon: const Icon(Icons.location_on_outlined, size: 20),
                 enabled: !_isSubmitting,
               ),
               const SizedBox(height: 16),
               AppTextFormField(
                 controller: _meetingUrlController,
-                labelText: 'Meeting Link / URL',
-                hintText: 'https://meet.google.com/xyz-abc',
-                prefixIcon: const Icon(Icons.video_call_outlined, size: 20),
+                labelText: 'Meeting URL',
+                hintText: 'https://meet.google.com/xyz-abc-123',
+                prefixIcon: const Icon(Icons.link_rounded, size: 20),
                 validator: Validators.url,
                 enabled: !_isSubmitting,
               ),
               const SizedBox(height: 16),
               AppTextFormField(
                 controller: _notesController,
-                labelText: 'Preparation & Interview Notes',
-                hintText:
-                    'Interviewer names, coding questions to practice, system design focus...',
-                maxLines: 4,
+                labelText: 'Preparation Notes & Questions',
+                hintText: 'Review System Design, behavioral stories...',
+                maxLines: 3,
                 enabled: !_isSubmitting,
               ),
               const SizedBox(height: 28),
               AppButton(
-                text: isEditMode ? 'Save Changes' : 'Schedule Round',
+                text: isEditMode ? 'Update Interview' : 'Schedule Interview',
                 isLoading: _isSubmitting,
                 onPressed: _submitForm,
               ),

@@ -4,6 +4,7 @@ import 'package:job_tracker/core/app/app_router.dart';
 import 'package:job_tracker/core/theme/app_theme.dart';
 import 'package:job_tracker/features/application/presentation/bloc/application_bloc.dart';
 import 'package:job_tracker/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:job_tracker/features/auth/presentation/bloc/auth_event.dart';
 import 'package:job_tracker/features/dashboard/presentation/bloc/dashboard_bloc.dart';
 import 'package:job_tracker/features/reminder/presentation/bloc/reminder_bloc.dart';
 import 'package:job_tracker/features/settings/presentation/bloc/settings_bloc.dart';
@@ -28,7 +29,7 @@ class JobTrackerApp extends StatelessWidget {
           create: (_) => di.sl<SettingsBloc>()..add(const LoadSettingsEvent()),
         ),
         BlocProvider<AuthBloc>(
-          create: (_) => di.sl<AuthBloc>(),
+          create: (_) => di.sl<AuthBloc>()..add(const AuthCheckRequested()),
         ),
         BlocProvider<ApplicationBloc>(
           create: (_) => di.sl<ApplicationBloc>(),
