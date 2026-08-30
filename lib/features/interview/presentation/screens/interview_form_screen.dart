@@ -191,7 +191,7 @@ class _InterviewFormScreenState extends State<InterviewFormScreen> {
                   ),
                   const SizedBox(height: 6),
                   DropdownButtonFormField<String>(
-                    value: _selectedType,
+                    initialValue: _selectedType,
                     items: AppConstants.interviewTypes.map((t) {
                       return DropdownMenuItem(value: t, child: Text(t));
                     }).toList(),

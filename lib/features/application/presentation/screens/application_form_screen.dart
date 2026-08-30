@@ -227,7 +227,7 @@ class _ApplicationFormScreenState extends State<ApplicationFormScreen> {
                                 fontSize: 13, fontWeight: FontWeight.w600)),
                         const SizedBox(height: 6),
                         DropdownButtonFormField<String>(
-                          value: _selectedStatus,
+                          initialValue: _selectedStatus,
                           decoration: const InputDecoration(
                               contentPadding: EdgeInsets.symmetric(
                                   horizontal: 12, vertical: 10)),
@@ -315,7 +315,7 @@ class _ApplicationFormScreenState extends State<ApplicationFormScreen> {
                                 fontSize: 13, fontWeight: FontWeight.w600)),
                         const SizedBox(height: 6),
                         DropdownButtonFormField<String>(
-                          value: _selectedCurrency,
+                          initialValue: _selectedCurrency,
                           decoration: const InputDecoration(
                               contentPadding: EdgeInsets.symmetric(
                                   horizontal: 8, vertical: 10)),

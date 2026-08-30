@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'core/app/app_router.dart';
-import 'core/theme/app_theme.dart';
-import 'features/application/presentation/bloc/application_bloc.dart';
-import 'features/auth/presentation/bloc/auth_bloc.dart';
-import 'features/dashboard/presentation/bloc/dashboard_bloc.dart';
-import 'features/reminder/presentation/bloc/reminder_bloc.dart';
-import 'features/settings/presentation/bloc/settings_bloc.dart';
-import 'features/settings/presentation/bloc/settings_event.dart';
-import 'features/settings/presentation/bloc/settings_state.dart';
-import 'injection_container.dart' as di;
+import 'package:job_tracker/core/app/app_router.dart';
+import 'package:job_tracker/core/theme/app_theme.dart';
+import 'package:job_tracker/features/application/presentation/bloc/application_bloc.dart';
+import 'package:job_tracker/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:job_tracker/features/dashboard/presentation/bloc/dashboard_bloc.dart';
+import 'package:job_tracker/features/reminder/presentation/bloc/reminder_bloc.dart';
+import 'package:job_tracker/features/settings/presentation/bloc/settings_bloc.dart';
+import 'package:job_tracker/features/settings/presentation/bloc/settings_event.dart';
+import 'package:job_tracker/features/settings/presentation/bloc/settings_state.dart';
+import 'package:job_tracker/injection_container.dart' as di;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

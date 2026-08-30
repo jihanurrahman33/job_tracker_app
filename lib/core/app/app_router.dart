@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../features/application/domain/entities/application_entity.dart';
-import '../../features/application/presentation/screens/application_detail_screen.dart';
-import '../../features/application/presentation/screens/application_form_screen.dart';
-import '../../features/application/presentation/screens/application_list_screen.dart';
-import '../../features/auth/presentation/screens/login_screen.dart';
-import '../../features/auth/presentation/screens/register_screen.dart';
-import '../../features/auth/presentation/screens/splash_screen.dart';
-import '../../features/dashboard/presentation/screens/dashboard_screen.dart';
-import '../../features/interview/domain/entities/interview_entity.dart';
-import '../../features/interview/presentation/screens/interview_detail_screen.dart';
-import '../../features/interview/presentation/screens/interview_form_screen.dart';
-import '../../features/reminder/domain/entities/reminder_entity.dart';
-import '../../features/reminder/presentation/screens/reminder_form_screen.dart';
-import '../../features/reminder/presentation/screens/reminder_list_screen.dart';
-import '../../features/settings/presentation/screens/settings_screen.dart';
+import 'package:job_tracker/features/application/domain/entities/application_entity.dart';
+import 'package:job_tracker/features/application/presentation/screens/application_detail_screen.dart';
+import 'package:job_tracker/features/application/presentation/screens/application_form_screen.dart';
+import 'package:job_tracker/features/application/presentation/screens/application_list_screen.dart';
+import 'package:job_tracker/features/auth/presentation/screens/login_screen.dart';
+import 'package:job_tracker/features/auth/presentation/screens/register_screen.dart';
+import 'package:job_tracker/features/auth/presentation/screens/splash_screen.dart';
+import 'package:job_tracker/features/dashboard/presentation/screens/dashboard_screen.dart';
+import 'package:job_tracker/features/interview/domain/entities/interview_entity.dart';
+import 'package:job_tracker/features/interview/presentation/screens/interview_detail_screen.dart';
+import 'package:job_tracker/features/interview/presentation/screens/interview_form_screen.dart';
+import 'package:job_tracker/features/reminder/domain/entities/reminder_entity.dart';
+import 'package:job_tracker/features/reminder/presentation/screens/reminder_form_screen.dart';
+import 'package:job_tracker/features/reminder/presentation/screens/reminder_list_screen.dart';
+import 'package:job_tracker/features/settings/presentation/screens/settings_screen.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
 final GlobalKey<NavigatorState> _dashboardNavigatorKey =

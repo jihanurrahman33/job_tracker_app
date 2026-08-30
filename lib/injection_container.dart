@@ -1,13 +1,13 @@
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
+import 'package:job_tracker/core/networking/api_client.dart';
+import 'package:job_tracker/features/application/di.dart';
+import 'package:job_tracker/features/auth/di.dart';
+import 'package:job_tracker/features/dashboard/di.dart';
+import 'package:job_tracker/features/interview/di.dart';
+import 'package:job_tracker/features/reminder/di.dart';
+import 'package:job_tracker/features/settings/di.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'core/networking/api_client.dart';
-import 'features/application/di.dart';
-import 'features/auth/di.dart';
-import 'features/dashboard/di.dart';
-import 'features/interview/di.dart';
-import 'features/reminder/di.dart';
-import 'features/settings/di.dart';
 
 final sl = GetIt.instance;
 
