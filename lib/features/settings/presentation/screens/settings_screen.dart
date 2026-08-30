@@ -167,56 +167,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 return Card(
                   child: Column(
                     children: [
-                      RadioListTile<String>(
-                        title: const Text('Render Live (Recommended)'),
-                        subtitle: const Text(ApiEndpoints.renderUrl,
-                            style: TextStyle(fontSize: 11)),
-                        value: ApiEndpoints.renderUrl,
-                        groupValue: state.currentServerUrl,
-                        onChanged: (val) {
-                          if (val != null) {
-                            _customUrlController.text = val;
-                            context
-                                .read<SettingsBloc>()
-                                .add(ServerUrlChangedEvent(val));
-                            context.showSnackBar('Switched to Render server');
-                          }
-                        },
+                      _buildServerTile(
+                        context,
+                        title: 'Render Live (Recommended)',
+                        subtitle: ApiEndpoints.renderUrl,
+                        url: ApiEndpoints.renderUrl,
+                        isSelected: state.currentServerUrl == ApiEndpoints.renderUrl,
                       ),
                       const Divider(height: 1),
-                      RadioListTile<String>(
-                        title: const Text('Vercel Serverless'),
-                        subtitle: const Text(ApiEndpoints.vercelUrl,
-                            style: TextStyle(fontSize: 11)),
-                        value: ApiEndpoints.vercelUrl,
-                        groupValue: state.currentServerUrl,
-                        onChanged: (val) {
-                          if (val != null) {
-                            _customUrlController.text = val;
-                            context
-                                .read<SettingsBloc>()
-                                .add(ServerUrlChangedEvent(val));
-                            context.showSnackBar('Switched to Vercel server');
-                          }
-                        },
+                      _buildServerTile(
+                        context,
+                        title: 'Vercel Serverless',
+                        subtitle: ApiEndpoints.vercelUrl,
+                        url: ApiEndpoints.vercelUrl,
+                        isSelected: state.currentServerUrl == ApiEndpoints.vercelUrl,
                       ),
                       const Divider(height: 1),
-                      RadioListTile<String>(
-                        title: const Text('Localhost Daemon'),
-                        subtitle: const Text(ApiEndpoints.localUrl,
-                            style: TextStyle(fontSize: 11)),
-                        value: ApiEndpoints.localUrl,
-                        groupValue: state.currentServerUrl,
-                        onChanged: (val) {
-                          if (val != null) {
-                            _customUrlController.text = val;
-                            context
-                                .read<SettingsBloc>()
-                                .add(ServerUrlChangedEvent(val));
-                            context
-                                .showSnackBar('Switched to Localhost server');
-                          }
-                        },
+                      _buildServerTile(
+                        context,
+                        title: 'Localhost Daemon',
+                        subtitle: ApiEndpoints.localUrl,
+                        url: ApiEndpoints.localUrl,
+                        isSelected: state.currentServerUrl == ApiEndpoints.localUrl,
                       ),
                       const Divider(height: 1),
                       Padding(
@@ -282,46 +254,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 return Card(
                   child: Column(
                     children: [
-                      RadioListTile<ThemeMode>(
-                        title: const Text('System Default'),
-                        secondary: const Icon(Icons.brightness_auto_rounded),
-                        value: ThemeMode.system,
-                        groupValue: state.themeMode,
-                        onChanged: (mode) {
-                          if (mode != null) {
-                            context
-                                .read<SettingsBloc>()
-                                .add(ThemeModeChangedEvent(mode));
-                          }
-                        },
+                      _buildThemeTile(
+                        context,
+                        title: 'System Default',
+                        icon: Icons.brightness_auto_rounded,
+                        mode: ThemeMode.system,
+                        isSelected: state.themeMode == ThemeMode.system,
                       ),
                       const Divider(height: 1),
-                      RadioListTile<ThemeMode>(
-                        title: const Text('Light Mode'),
-                        secondary: const Icon(Icons.light_mode_rounded),
-                        value: ThemeMode.light,
-                        groupValue: state.themeMode,
-                        onChanged: (mode) {
-                          if (mode != null) {
-                            context
-                                .read<SettingsBloc>()
-                                .add(ThemeModeChangedEvent(mode));
-                          }
-                        },
+                      _buildThemeTile(
+                        context,
+                        title: 'Light Mode',
+                        icon: Icons.light_mode_rounded,
+                        mode: ThemeMode.light,
+                        isSelected: state.themeMode == ThemeMode.light,
                       ),
                       const Divider(height: 1),
-                      RadioListTile<ThemeMode>(
-                        title: const Text('Dark Mode'),
-                        secondary: const Icon(Icons.dark_mode_rounded),
-                        value: ThemeMode.dark,
-                        groupValue: state.themeMode,
-                        onChanged: (mode) {
-                          if (mode != null) {
-                            context
-                                .read<SettingsBloc>()
-                                .add(ThemeModeChangedEvent(mode));
-                          }
-                        },
+                      _buildThemeTile(
+                        context,
+                        title: 'Dark Mode',
+                        icon: Icons.dark_mode_rounded,
+                        mode: ThemeMode.dark,
+                        isSelected: state.themeMode == ThemeMode.dark,
                       ),
                     ],
                   ),
@@ -355,6 +309,56 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildServerTile(
+    BuildContext context, {
+    required String title,
+    required String subtitle,
+    required String url,
+    required bool isSelected,
+  }) {
+    final theme = Theme.of(context);
+
+    return ListTile(
+      title: Text(title),
+      subtitle: Text(subtitle, style: const TextStyle(fontSize: 11)),
+      trailing: Icon(
+        isSelected ? Icons.radio_button_checked : Icons.radio_button_off,
+        color: isSelected
+            ? theme.colorScheme.primary
+            : theme.colorScheme.onSurface.withValues(alpha: 0.4),
+      ),
+      onTap: () {
+        _customUrlController.text = url;
+        context.read<SettingsBloc>().add(ServerUrlChangedEvent(url));
+        context.showSnackBar('Switched to server: $title');
+      },
+    );
+  }
+
+  Widget _buildThemeTile(
+    BuildContext context, {
+    required String title,
+    required IconData icon,
+    required ThemeMode mode,
+    required bool isSelected,
+  }) {
+    final theme = Theme.of(context);
+
+    return ListTile(
+      leading: Icon(icon),
+      title: Text(title),
+      trailing: Icon(
+        isSelected ? Icons.radio_button_checked : Icons.radio_button_off,
+        color: isSelected
+            ? theme.colorScheme.primary
+            : theme.colorScheme.onSurface.withValues(alpha: 0.4),
+      ),
+      onTap: () {
+        context.read<SettingsBloc>().add(ThemeModeChangedEvent(mode));
+      },
     );
   }
 }
