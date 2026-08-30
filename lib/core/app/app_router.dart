@@ -31,7 +31,6 @@ class AppRouter {
     navigatorKey: _rootNavigatorKey,
     initialLocation: '/splash',
     routes: [
-      // Splash & Auth routes
       GoRoute(
         path: '/splash',
         parentNavigatorKey: _rootNavigatorKey,
@@ -47,14 +46,11 @@ class AppRouter {
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const RegisterScreen(),
       ),
-
-      // Root App Shell with Bottom Navigation Bar
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
           return ScaffoldWithNavBar(navigationShell: navigationShell);
         },
         branches: [
-          // Branch 0: Dashboard
           StatefulShellBranch(
             navigatorKey: _dashboardNavigatorKey,
             routes: [
@@ -64,8 +60,6 @@ class AppRouter {
               ),
             ],
           ),
-
-          // Branch 1: Applications
           StatefulShellBranch(
             navigatorKey: _applicationsNavigatorKey,
             routes: [
@@ -120,8 +114,6 @@ class AppRouter {
               ),
             ],
           ),
-
-          // Branch 2: Reminders
           StatefulShellBranch(
             navigatorKey: _remindersNavigatorKey,
             routes: [
@@ -153,8 +145,6 @@ class AppRouter {
               ),
             ],
           ),
-
-          // Branch 3: Settings
           StatefulShellBranch(
             navigatorKey: _settingsNavigatorKey,
             routes: [
@@ -166,8 +156,6 @@ class AppRouter {
           ),
         ],
       ),
-
-      // Standalone Interview Detail route
       GoRoute(
         path: '/interviews/:id',
         parentNavigatorKey: _rootNavigatorKey,
@@ -233,4 +221,3 @@ class ScaffoldWithNavBar extends StatelessWidget {
     );
   }
 }
-
