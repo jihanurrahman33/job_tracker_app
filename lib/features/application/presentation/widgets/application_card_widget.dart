@@ -33,7 +33,8 @@ class ApplicationCardWidget extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 20,
-                    backgroundColor: theme.colorScheme.primary.withValues(alpha: 0.12),
+                    backgroundColor:
+                        theme.colorScheme.primary.withValues(alpha: 0.12),
                     child: Text(
                       application.company.isNotEmpty
                           ? application.company[0].toUpperCase()
@@ -62,7 +63,8 @@ class ApplicationCardWidget extends StatelessWidget {
                         Text(
                           application.company,
                           style: theme.textTheme.bodyMedium?.copyWith(
-                            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                            color: theme.colorScheme.onSurface
+                                .withValues(alpha: 0.7),
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -90,7 +92,8 @@ class ApplicationCardWidget extends StatelessWidget {
                       application.location!,
                       style: TextStyle(
                         fontSize: 12,
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                        color:
+                            theme.colorScheme.onSurface.withValues(alpha: 0.6),
                       ),
                     ),
                     const Spacer(),
@@ -108,7 +111,8 @@ class ApplicationCardWidget extends StatelessWidget {
                       'Applied: ${application.appliedAt!.toShortDate()}',
                       style: TextStyle(
                         fontSize: 12,
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                        color:
+                            theme.colorScheme.onSurface.withValues(alpha: 0.6),
                       ),
                     ),
                   ],

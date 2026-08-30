@@ -4,7 +4,8 @@ import 'package:job_tracker/core/widgets/status_badge.dart';
 
 void main() {
   group('StatusBadge Widget Tests', () {
-    testWidgets('renders application status in title case correctly', (tester) async {
+    testWidgets('renders application status in title case correctly',
+        (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(

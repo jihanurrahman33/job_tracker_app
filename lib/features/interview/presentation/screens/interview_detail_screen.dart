@@ -44,14 +44,16 @@ class InterviewDetailScreen extends StatelessWidget {
               final confirmed = await ConfirmationDialog.show(
                 context,
                 title: 'Delete Interview Round',
-                content: 'Are you sure you want to delete this interview round?',
+                content:
+                    'Are you sure you want to delete this interview round?',
                 confirmText: 'Delete',
                 isDestructive: true,
               );
 
               if (confirmed == true && context.mounted) {
                 final deleteUseCase = GetIt.I<DeleteInterviewUseCase>();
-                final result = await deleteUseCase(DeleteInterviewParams(id: interview.id));
+                final result = await deleteUseCase(
+                    DeleteInterviewParams(id: interview.id));
                 result.fold(
                   (f) => context.showSnackBar(f.message, isError: true),
                   (_) {
@@ -88,7 +90,8 @@ class InterviewDetailScreen extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w600,
-                            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                            color: theme.colorScheme.onSurface
+                                .withValues(alpha: 0.6),
                           ),
                         ),
                       ],
@@ -132,7 +135,8 @@ class InterviewDetailScreen extends StatelessWidget {
                                   'Meeting Link',
                                   style: TextStyle(
                                     fontSize: 11,
-                                    color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                                    color: theme.colorScheme.onSurface
+                                        .withValues(alpha: 0.5),
                                   ),
                                 ),
                                 const SizedBox(height: 2),
@@ -151,8 +155,10 @@ class InterviewDetailScreen extends StatelessWidget {
                             icon: const Icon(Icons.copy_rounded, size: 18),
                             tooltip: 'Copy Link',
                             onPressed: () {
-                              Clipboard.setData(ClipboardData(text: interview.meetingUrl!));
-                              context.showSnackBar('Meeting URL copied to clipboard!');
+                              Clipboard.setData(
+                                  ClipboardData(text: interview.meetingUrl!));
+                              context.showSnackBar(
+                                  'Meeting URL copied to clipboard!');
                             },
                           ),
                         ],
@@ -164,7 +170,8 @@ class InterviewDetailScreen extends StatelessWidget {
                       const SizedBox(height: 8),
                       const Text(
                         'Preparation Notes:',
-                        style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 13),
                       ),
                       const SizedBox(height: 6),
                       Container(
@@ -173,13 +180,15 @@ class InterviewDetailScreen extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: theme.colorScheme.surface,
                           borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: theme.dividerColor.withValues(alpha: 0.6)),
+                          border: Border.all(
+                              color: theme.dividerColor.withValues(alpha: 0.6)),
                         ),
                         child: Text(
                           interview.notes!,
                           style: TextStyle(
                             fontSize: 13,
-                            color: theme.colorScheme.onSurface.withValues(alpha: 0.85),
+                            color: theme.colorScheme.onSurface
+                                .withValues(alpha: 0.85),
                             height: 1.4,
                           ),
                         ),
@@ -206,7 +215,9 @@ class InterviewDetailScreen extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, size: 20, color: theme.colorScheme.onSurface.withValues(alpha: 0.6)),
+        Icon(icon,
+            size: 20,
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.6)),
         const SizedBox(width: 12),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,

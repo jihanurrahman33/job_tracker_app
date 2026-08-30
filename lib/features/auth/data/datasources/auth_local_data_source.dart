@@ -28,7 +28,8 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
       token,
     );
     if (!success) {
-      throw const CacheException(message: 'Failed to cache authentication token.');
+      throw const CacheException(
+          message: 'Failed to cache authentication token.');
     }
   }
 
@@ -56,7 +57,8 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
 
   @override
   Future<UserModel?> getUser() async {
-    final jsonStr = sharedPreferences.getString(ApiEndpoints.authUserStorageKey);
+    final jsonStr =
+        sharedPreferences.getString(ApiEndpoints.authUserStorageKey);
     if (jsonStr == null || jsonStr.isEmpty) return null;
 
     try {

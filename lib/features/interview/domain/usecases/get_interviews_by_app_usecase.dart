@@ -14,8 +14,7 @@ class GetInterviewsByAppParams extends Equatable {
 }
 
 class GetInterviewsByAppUseCase
-    implements
-        UseCase<List<InterviewEntity>, GetInterviewsByAppParams> {
+    implements UseCase<List<InterviewEntity>, GetInterviewsByAppParams> {
   final InterviewRepository repository;
 
   GetInterviewsByAppUseCase(this.repository);

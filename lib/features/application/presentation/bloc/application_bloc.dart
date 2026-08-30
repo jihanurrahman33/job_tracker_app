@@ -128,7 +128,8 @@ class ApplicationBloc extends Bloc<ApplicationEvent, ApplicationState> {
     Emitter<ApplicationState> emit,
   ) async {
     final prevList = state.applications;
-    final updatedList = state.applications.where((a) => a.id != event.id).toList();
+    final updatedList =
+        state.applications.where((a) => a.id != event.id).toList();
     emit(state.copyWith(applications: updatedList));
 
     final result = await deleteApplicationUseCase(

@@ -17,8 +17,10 @@ class StatisticsEntity extends Equatable {
 
   int countForStatus(String status) => byStatus[status.toUpperCase()] ?? 0;
 
-  String get responseRatePercent => '${(responseRate * 100).toStringAsFixed(1)}%';
-  String get interviewRatePercent => '${(interviewRate * 100).toStringAsFixed(1)}%';
+  String get responseRatePercent =>
+      '${(responseRate * 100).toStringAsFixed(1)}%';
+  String get interviewRatePercent =>
+      '${(interviewRate * 100).toStringAsFixed(1)}%';
   String get offerRatePercent => '${(offerRate * 100).toStringAsFixed(1)}%';
 
   @override

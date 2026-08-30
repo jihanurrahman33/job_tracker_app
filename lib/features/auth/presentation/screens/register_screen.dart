@@ -71,7 +71,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   children: [
                     const AuthHeaderWidget(
                       title: 'Create an Account',
-                      subtitle: 'Start organizing and supercharging your job search',
+                      subtitle:
+                          'Start organizing and supercharging your job search',
                     ),
                     const SizedBox(height: 32),
                     AppTextFormField(
@@ -80,7 +81,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       hintText: 'John Doe',
                       textInputAction: TextInputAction.next,
                       prefixIcon: const Icon(Icons.person_outline, size: 20),
-                      validator: (val) => Validators.requiredField(val, 'Name is required'),
+                      validator: (val) =>
+                          Validators.requiredField(val, 'Name is required'),
                       enabled: !isLoading,
                     ),
                     const SizedBox(height: 16),

@@ -72,9 +72,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           children: [
                             CircleAvatar(
                               radius: 26,
-                              backgroundColor: theme.colorScheme.primary.withValues(alpha: 0.15),
+                              backgroundColor: theme.colorScheme.primary
+                                  .withValues(alpha: 0.15),
                               child: Text(
-                                user.name.isNotEmpty ? user.name[0].toUpperCase() : 'U',
+                                user.name.isNotEmpty
+                                    ? user.name[0].toUpperCase()
+                                    : 'U',
                                 style: TextStyle(
                                   fontSize: 22,
                                   fontWeight: FontWeight.bold,
@@ -99,7 +102,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     user.email,
                                     style: TextStyle(
                                       fontSize: 13,
-                                      color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                                      color: theme.colorScheme.onSurface
+                                          .withValues(alpha: 0.6),
                                     ),
                                   ),
                                   const SizedBox(height: 2),
@@ -107,14 +111,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     'Joined: ${user.createdAt.toMediumDate()}',
                                     style: TextStyle(
                                       fontSize: 11,
-                                      color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                                      color: theme.colorScheme.onSurface
+                                          .withValues(alpha: 0.5),
                                     ),
                                   ),
                                 ],
                               ),
                             ),
                             IconButton(
-                              icon: const Icon(Icons.logout_rounded, color: Colors.red),
+                              icon: const Icon(Icons.logout_rounded,
+                                  color: Colors.red),
                               tooltip: 'Log out',
                               onPressed: () async {
                                 final confirmed = await ConfirmationDialog.show(
@@ -125,7 +131,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   isDestructive: true,
                                 );
                                 if (confirmed == true && context.mounted) {
-                                  context.read<AuthBloc>().add(const AuthLogoutRequested());
+                                  context
+                                      .read<AuthBloc>()
+                                      .add(const AuthLogoutRequested());
                                   context.go('/login');
                                 }
                               },
@@ -139,7 +147,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 );
               },
             ),
-
             Text(
               'Backend API Server',
               style: theme.textTheme.titleMedium?.copyWith(
@@ -162,13 +169,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     children: [
                       RadioListTile<String>(
                         title: const Text('Render Live (Recommended)'),
-                        subtitle: const Text(ApiEndpoints.renderUrl, style: TextStyle(fontSize: 11)),
+                        subtitle: const Text(ApiEndpoints.renderUrl,
+                            style: TextStyle(fontSize: 11)),
                         value: ApiEndpoints.renderUrl,
                         groupValue: state.currentServerUrl,
                         onChanged: (val) {
                           if (val != null) {
                             _customUrlController.text = val;
-                            context.read<SettingsBloc>().add(ServerUrlChangedEvent(val));
+                            context
+                                .read<SettingsBloc>()
+                                .add(ServerUrlChangedEvent(val));
                             context.showSnackBar('Switched to Render server');
                           }
                         },
@@ -176,13 +186,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       const Divider(height: 1),
                       RadioListTile<String>(
                         title: const Text('Vercel Serverless'),
-                        subtitle: const Text(ApiEndpoints.vercelUrl, style: TextStyle(fontSize: 11)),
+                        subtitle: const Text(ApiEndpoints.vercelUrl,
+                            style: TextStyle(fontSize: 11)),
                         value: ApiEndpoints.vercelUrl,
                         groupValue: state.currentServerUrl,
                         onChanged: (val) {
                           if (val != null) {
                             _customUrlController.text = val;
-                            context.read<SettingsBloc>().add(ServerUrlChangedEvent(val));
+                            context
+                                .read<SettingsBloc>()
+                                .add(ServerUrlChangedEvent(val));
                             context.showSnackBar('Switched to Vercel server');
                           }
                         },
@@ -190,14 +203,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       const Divider(height: 1),
                       RadioListTile<String>(
                         title: const Text('Localhost Daemon'),
-                        subtitle: const Text(ApiEndpoints.localUrl, style: TextStyle(fontSize: 11)),
+                        subtitle: const Text(ApiEndpoints.localUrl,
+                            style: TextStyle(fontSize: 11)),
                         value: ApiEndpoints.localUrl,
                         groupValue: state.currentServerUrl,
                         onChanged: (val) {
                           if (val != null) {
                             _customUrlController.text = val;
-                            context.read<SettingsBloc>().add(ServerUrlChangedEvent(val));
-                            context.showSnackBar('Switched to Localhost server');
+                            context
+                                .read<SettingsBloc>()
+                                .add(ServerUrlChangedEvent(val));
+                            context
+                                .showSnackBar('Switched to Localhost server');
                           }
                         },
                       ),
@@ -209,7 +226,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           children: [
                             const Text(
                               'Custom Server URL',
-                              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                              style: TextStyle(
+                                  fontSize: 13, fontWeight: FontWeight.w600),
                             ),
                             const SizedBox(height: 6),
                             Row(
@@ -219,18 +237,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     controller: _customUrlController,
                                     decoration: const InputDecoration(
                                       hintText: 'https://custom-server.com',
-                                      prefixIcon: Icon(Icons.dns_rounded, size: 18),
-                                      contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                                      prefixIcon:
+                                          Icon(Icons.dns_rounded, size: 18),
+                                      contentPadding: EdgeInsets.symmetric(
+                                          horizontal: 12, vertical: 10),
                                     ),
                                   ),
                                 ),
                                 const SizedBox(width: 8),
                                 ElevatedButton(
                                   onPressed: () {
-                                    final url = _customUrlController.text.trim();
+                                    final url =
+                                        _customUrlController.text.trim();
                                     if (url.isNotEmpty) {
-                                      context.read<SettingsBloc>().add(ServerUrlChangedEvent(url));
-                                      context.showSnackBar('Custom server URL saved');
+                                      context
+                                          .read<SettingsBloc>()
+                                          .add(ServerUrlChangedEvent(url));
+                                      context.showSnackBar(
+                                          'Custom server URL saved');
                                     }
                                   },
                                   child: const Text('Save'),
@@ -246,7 +270,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
               },
             ),
             const SizedBox(height: 24),
-
             Text(
               'Appearance',
               style: theme.textTheme.titleMedium?.copyWith(
@@ -266,7 +289,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         groupValue: state.themeMode,
                         onChanged: (mode) {
                           if (mode != null) {
-                            context.read<SettingsBloc>().add(ThemeModeChangedEvent(mode));
+                            context
+                                .read<SettingsBloc>()
+                                .add(ThemeModeChangedEvent(mode));
                           }
                         },
                       ),
@@ -278,7 +303,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         groupValue: state.themeMode,
                         onChanged: (mode) {
                           if (mode != null) {
-                            context.read<SettingsBloc>().add(ThemeModeChangedEvent(mode));
+                            context
+                                .read<SettingsBloc>()
+                                .add(ThemeModeChangedEvent(mode));
                           }
                         },
                       ),
@@ -290,7 +317,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         groupValue: state.themeMode,
                         onChanged: (mode) {
                           if (mode != null) {
-                            context.read<SettingsBloc>().add(ThemeModeChangedEvent(mode));
+                            context
+                                .read<SettingsBloc>()
+                                .add(ThemeModeChangedEvent(mode));
                           }
                         },
                       ),
@@ -300,7 +329,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
               },
             ),
             const SizedBox(height: 32),
-
             Center(
               child: Column(
                 children: [

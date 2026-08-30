@@ -18,7 +18,8 @@ class NetworkException implements Exception {
   final String message;
 
   const NetworkException({
-    this.message = 'Unable to connect to server. Please check your internet connection.',
+    this.message =
+        'Unable to connect to server. Please check your internet connection.',
   });
 
   @override

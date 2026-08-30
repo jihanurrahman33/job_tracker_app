@@ -30,7 +30,8 @@ void main() {
       expect(result.id, equals('user_123'));
       expect(result.email, equals('john@example.com'));
       expect(result.name, equals('John Doe'));
-      expect(result.createdAt, equals(DateTime.parse('2026-08-30T10:00:00.000Z')));
+      expect(
+          result.createdAt, equals(DateTime.parse('2026-08-30T10:00:00.000Z')));
     });
 
     test('toJson should convert UserModel to JSON map', () {

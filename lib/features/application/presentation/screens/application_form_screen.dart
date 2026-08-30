@@ -183,7 +183,8 @@ class _ApplicationFormScreenState extends State<ApplicationFormScreen> {
                 labelText: 'Company Name *',
                 hintText: 'e.g. Google, Stripe, Linear',
                 prefixIcon: const Icon(Icons.business_outlined, size: 20),
-                validator: (val) => Validators.requiredField(val, 'Company is required'),
+                validator: (val) =>
+                    Validators.requiredField(val, 'Company is required'),
                 enabled: !_isSubmitting,
               ),
               const SizedBox(height: 16),
@@ -192,7 +193,8 @@ class _ApplicationFormScreenState extends State<ApplicationFormScreen> {
                 labelText: 'Job Title / Position *',
                 hintText: 'e.g. Senior Mobile Engineer',
                 prefixIcon: const Icon(Icons.badge_outlined, size: 20),
-                validator: (val) => Validators.requiredField(val, 'Position is required'),
+                validator: (val) =>
+                    Validators.requiredField(val, 'Position is required'),
                 enabled: !_isSubmitting,
               ),
               const SizedBox(height: 16),
@@ -220,17 +222,27 @@ class _ApplicationFormScreenState extends State<ApplicationFormScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text('Pipeline Status *', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+                        const Text('Pipeline Status *',
+                            style: TextStyle(
+                                fontSize: 13, fontWeight: FontWeight.w600)),
                         const SizedBox(height: 6),
                         DropdownButtonFormField<String>(
                           value: _selectedStatus,
-                          decoration: const InputDecoration(contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10)),
+                          decoration: const InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 10)),
                           items: AppConstants.applicationStatuses.map((s) {
-                            return DropdownMenuItem(value: s, child: Text(s, style: const TextStyle(fontSize: 13)));
+                            return DropdownMenuItem(
+                                value: s,
+                                child: Text(s,
+                                    style: const TextStyle(fontSize: 13)));
                           }).toList(),
-                          onChanged: _isSubmitting ? null : (val) {
-                            if (val != null) setState(() => _selectedStatus = val);
-                          },
+                          onChanged: _isSubmitting
+                              ? null
+                              : (val) {
+                                  if (val != null)
+                                    setState(() => _selectedStatus = val);
+                                },
                         ),
                       ],
                     ),
@@ -240,17 +252,22 @@ class _ApplicationFormScreenState extends State<ApplicationFormScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text('Date Applied', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+                        const Text('Date Applied',
+                            style: TextStyle(
+                                fontSize: 13, fontWeight: FontWeight.w600)),
                         const SizedBox(height: 6),
                         InkWell(
                           onTap: _isSubmitting ? null : _selectAppliedDate,
                           child: InputDecorator(
                             decoration: const InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 14),
                               suffixIcon: Icon(Icons.calendar_month, size: 18),
                             ),
                             child: Text(
-                              _appliedAt != null ? _appliedAt!.toShortDate() : 'Select date',
+                              _appliedAt != null
+                                  ? _appliedAt!.toShortDate()
+                                  : 'Select date',
                               style: const TextStyle(fontSize: 13),
                             ),
                           ),
@@ -293,17 +310,27 @@ class _ApplicationFormScreenState extends State<ApplicationFormScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text('Currency', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+                        const Text('Currency',
+                            style: TextStyle(
+                                fontSize: 13, fontWeight: FontWeight.w600)),
                         const SizedBox(height: 6),
                         DropdownButtonFormField<String>(
                           value: _selectedCurrency,
-                          decoration: const InputDecoration(contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 10)),
+                          decoration: const InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 10)),
                           items: AppConstants.supportedCurrencies.map((c) {
-                            return DropdownMenuItem(value: c, child: Text(c, style: const TextStyle(fontSize: 13)));
+                            return DropdownMenuItem(
+                                value: c,
+                                child: Text(c,
+                                    style: const TextStyle(fontSize: 13)));
                           }).toList(),
-                          onChanged: _isSubmitting ? null : (val) {
-                            if (val != null) setState(() => _selectedCurrency = val);
-                          },
+                          onChanged: _isSubmitting
+                              ? null
+                              : (val) {
+                                  if (val != null)
+                                    setState(() => _selectedCurrency = val);
+                                },
                         ),
                       ],
                     ),
@@ -314,7 +341,8 @@ class _ApplicationFormScreenState extends State<ApplicationFormScreen> {
               AppTextFormField(
                 controller: _notesController,
                 labelText: 'Notes / Recruiter Info',
-                hintText: 'Referral info, recruiter contact email, prep notes...',
+                hintText:
+                    'Referral info, recruiter contact email, prep notes...',
                 maxLines: 3,
                 enabled: !_isSubmitting,
               ),

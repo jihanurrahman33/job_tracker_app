@@ -20,6 +20,7 @@ class StatisticsRemoteDataSourceImpl implements StatisticsRemoteDataSource {
       return StatisticsModel.fromJson(response);
     }
 
-    throw const ServerException(message: 'Failed to fetch application statistics.');
+    throw const ServerException(
+        message: 'Failed to fetch application statistics.');
   }
 }

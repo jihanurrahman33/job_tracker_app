@@ -22,7 +22,8 @@ class EmptyStateWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final iconColor = isError ? theme.colorScheme.error : theme.colorScheme.primary;
+    final iconColor =
+        isError ? theme.colorScheme.error : theme.colorScheme.primary;
 
     return Center(
       child: Padding(
@@ -65,7 +66,9 @@ class EmptyStateWidget extends StatelessWidget {
               AppButton(
                 text: actionText!,
                 onPressed: onAction!,
-                variant: isError ? AppButtonVariant.outlined : AppButtonVariant.primary,
+                variant: isError
+                    ? AppButtonVariant.outlined
+                    : AppButtonVariant.primary,
               ),
             ],
           ],

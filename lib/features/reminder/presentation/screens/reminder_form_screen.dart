@@ -45,7 +45,8 @@ class _ReminderFormScreenState extends State<ReminderFormScreen> {
     _titleController = TextEditingController(
       text: rem?.title ?? widget.initialTitle ?? '',
     );
-    _descriptionController = TextEditingController(text: rem?.description ?? '');
+    _descriptionController =
+        TextEditingController(text: rem?.description ?? '');
     _remindAt = rem?.remindAt ?? DateTime.now().add(const Duration(days: 2));
   }
 
@@ -157,7 +158,8 @@ class _ReminderFormScreenState extends State<ReminderFormScreen> {
                 labelText: 'Reminder Title *',
                 hintText: 'e.g. Follow up on status with recruiter',
                 prefixIcon: const Icon(Icons.title_rounded, size: 20),
-                validator: (val) => Validators.requiredField(val, 'Title is required'),
+                validator: (val) =>
+                    Validators.requiredField(val, 'Title is required'),
                 enabled: !_isSubmitting,
               ),
               const SizedBox(height: 16),
@@ -173,12 +175,14 @@ class _ReminderFormScreenState extends State<ReminderFormScreen> {
                     onTap: _isSubmitting ? null : _selectDateTime,
                     child: InputDecorator(
                       decoration: const InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                         suffixIcon: Icon(Icons.access_time_rounded, size: 20),
                       ),
                       child: Text(
                         _remindAt.toDateTimeString(),
-                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                        style: const TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.w500),
                       ),
                     ),
                   ),
@@ -188,7 +192,8 @@ class _ReminderFormScreenState extends State<ReminderFormScreen> {
               AppTextFormField(
                 controller: _descriptionController,
                 labelText: 'Notes / Description',
-                hintText: 'Add context, email drafted, or specific questions to ask...',
+                hintText:
+                    'Add context, email drafted, or specific questions to ask...',
                 maxLines: 4,
                 enabled: !_isSubmitting,
               ),

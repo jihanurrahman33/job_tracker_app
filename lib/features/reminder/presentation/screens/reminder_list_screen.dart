@@ -40,7 +40,8 @@ class _ReminderListScreenState extends State<ReminderListScreen>
     return ResponsiveScaffold(
       maxWidth: 800,
       appBar: AppBar(
-        title: const Text('Reminders & Tasks', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: const Text('Reminders & Tasks',
+            style: TextStyle(fontWeight: FontWeight.bold)),
         bottom: TabBar(
           controller: _tabController,
           tabs: const [
@@ -53,7 +54,9 @@ class _ReminderListScreenState extends State<ReminderListScreen>
         onPressed: () async {
           final created = await context.push<bool>('/reminders/create');
           if (created == true && mounted) {
-            context.read<ReminderBloc>().add(const LoadRemindersEvent(refresh: true));
+            context
+                .read<ReminderBloc>()
+                .add(const LoadRemindersEvent(refresh: true));
           }
         },
         icon: const Icon(Icons.add_task_rounded),
@@ -66,7 +69,8 @@ class _ReminderListScreenState extends State<ReminderListScreen>
           }
         },
         builder: (context, state) {
-          if (state.status == ReminderStatus.loading && state.reminders.isEmpty) {
+          if (state.status == ReminderStatus.loading &&
+              state.reminders.isEmpty) {
             return const LoadingIndicator(message: 'Loading reminders...');
           }
 
@@ -74,11 +78,14 @@ class _ReminderListScreenState extends State<ReminderListScreen>
             return EmptyStateWidget(
               icon: Icons.error_outline,
               title: 'Could not load reminders',
-              description: state.errorMessage ?? 'Please check your connection.',
+              description:
+                  state.errorMessage ?? 'Please check your connection.',
               actionText: 'Retry',
               isError: true,
               onAction: () {
-                context.read<ReminderBloc>().add(const LoadRemindersEvent(refresh: true));
+                context
+                    .read<ReminderBloc>()
+                    .add(const LoadRemindersEvent(refresh: true));
               },
             );
           }
@@ -86,8 +93,10 @@ class _ReminderListScreenState extends State<ReminderListScreen>
           return TabBarView(
             controller: _tabController,
             children: [
-              _buildReminderList(context, state.pendingReminders, isPending: true),
-              _buildReminderList(context, state.completedReminders, isPending: false),
+              _buildReminderList(context, state.pendingReminders,
+                  isPending: true),
+              _buildReminderList(context, state.completedReminders,
+                  isPending: false),
             ],
           );
         },
@@ -102,7 +111,9 @@ class _ReminderListScreenState extends State<ReminderListScreen>
   }) {
     if (dynamicList.isEmpty) {
       return EmptyStateWidget(
-        icon: isPending ? Icons.check_circle_outline_rounded : Icons.task_alt_rounded,
+        icon: isPending
+            ? Icons.check_circle_outline_rounded
+            : Icons.task_alt_rounded,
         title: isPending ? 'All caught up!' : 'No completed tasks yet',
         description: isPending
             ? 'No pending follow-ups. Schedule one anytime!'
@@ -112,7 +123,9 @@ class _ReminderListScreenState extends State<ReminderListScreen>
 
     return RefreshIndicator(
       onRefresh: () async {
-        context.read<ReminderBloc>().add(const LoadRemindersEvent(refresh: true));
+        context
+            .read<ReminderBloc>()
+            .add(const LoadRemindersEvent(refresh: true));
       },
       child: ListView.builder(
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 80),
@@ -133,7 +146,9 @@ class _ReminderListScreenState extends State<ReminderListScreen>
               );
             },
             onDismissed: (_) {
-              context.read<ReminderBloc>().add(DeleteReminderEvent(reminder.id));
+              context
+                  .read<ReminderBloc>()
+                  .add(DeleteReminderEvent(reminder.id));
             },
             background: Container(
               margin: const EdgeInsets.symmetric(vertical: 4),

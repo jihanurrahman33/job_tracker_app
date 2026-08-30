@@ -45,12 +45,17 @@ class _InterviewFormScreenState extends State<InterviewFormScreen> {
     final interview = widget.interview;
 
     _selectedType = interview?.type ?? 'TECHNICAL';
-    _scheduledAt = interview?.scheduledAt ?? DateTime.now().add(const Duration(days: 1));
+    _scheduledAt =
+        interview?.scheduledAt ?? DateTime.now().add(const Duration(days: 1));
     _durationController = TextEditingController(
-      text: interview?.durationMinutes != null ? interview!.durationMinutes.toString() : '45',
+      text: interview?.durationMinutes != null
+          ? interview!.durationMinutes.toString()
+          : '45',
     );
-    _locationController = TextEditingController(text: interview?.location ?? '');
-    _meetingUrlController = TextEditingController(text: interview?.meetingUrl ?? '');
+    _locationController =
+        TextEditingController(text: interview?.location ?? '');
+    _meetingUrlController =
+        TextEditingController(text: interview?.meetingUrl ?? '');
     _notesController = TextEditingController(text: interview?.notes ?? '');
   }
 
@@ -166,7 +171,8 @@ class _InterviewFormScreenState extends State<InterviewFormScreen> {
     return ResponsiveScaffold(
       maxWidth: 600,
       appBar: AppBar(
-        title: Text(isEditMode ? 'Edit Interview Round' : 'Schedule Interview Round'),
+        title: Text(
+            isEditMode ? 'Edit Interview Round' : 'Schedule Interview Round'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
@@ -189,9 +195,12 @@ class _InterviewFormScreenState extends State<InterviewFormScreen> {
                     items: AppConstants.interviewTypes.map((t) {
                       return DropdownMenuItem(value: t, child: Text(t));
                     }).toList(),
-                    onChanged: _isSubmitting ? null : (val) {
-                      if (val != null) setState(() => _selectedType = val);
-                    },
+                    onChanged: _isSubmitting
+                        ? null
+                        : (val) {
+                            if (val != null)
+                              setState(() => _selectedType = val);
+                          },
                   ),
                 ],
               ),
@@ -210,7 +219,8 @@ class _InterviewFormScreenState extends State<InterviewFormScreen> {
                     child: InputDecorator(
                       decoration: const InputDecoration(
                         suffixIcon: Icon(Icons.access_time_rounded, size: 20),
-                        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                       ),
                       child: Text(
                         _scheduledAt.toDateTimeString(),
@@ -251,7 +261,8 @@ class _InterviewFormScreenState extends State<InterviewFormScreen> {
               AppTextFormField(
                 controller: _notesController,
                 labelText: 'Preparation & Interview Notes',
-                hintText: 'Interviewer names, coding questions to practice, system design focus...',
+                hintText:
+                    'Interviewer names, coding questions to practice, system design focus...',
                 maxLines: 4,
                 enabled: !_isSubmitting,
               ),

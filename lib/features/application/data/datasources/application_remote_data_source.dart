@@ -84,7 +84,8 @@ class ApplicationRemoteDataSourceImpl implements ApplicationRemoteDataSource {
     if (response is Map<String, dynamic>) {
       final dataList = response['data'] as List<dynamic>? ?? [];
       final applications = dataList
-          .map((json) => ApplicationModel.fromJson(json as Map<String, dynamic>))
+          .map(
+              (json) => ApplicationModel.fromJson(json as Map<String, dynamic>))
           .toList();
 
       final metaJson = response['meta'] as Map<String, dynamic>? ??
@@ -110,7 +111,8 @@ class ApplicationRemoteDataSourceImpl implements ApplicationRemoteDataSource {
       return ApplicationModel.fromJson(response);
     }
 
-    throw const ServerException(message: 'Failed to fetch application details.');
+    throw const ServerException(
+        message: 'Failed to fetch application details.');
   }
 
   @override

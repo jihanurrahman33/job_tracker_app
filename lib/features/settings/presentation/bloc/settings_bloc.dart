@@ -23,9 +23,11 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     LoadSettingsEvent event,
     Emitter<SettingsState> emit,
   ) {
-    final savedUrl = sharedPreferences.getString(ApiEndpoints.baseUrlStorageKey) ??
-        ApiEndpoints.defaultBaseUrl;
-    final savedTheme = sharedPreferences.getString(ApiEndpoints.themeModeStorageKey);
+    final savedUrl =
+        sharedPreferences.getString(ApiEndpoints.baseUrlStorageKey) ??
+            ApiEndpoints.defaultBaseUrl;
+    final savedTheme =
+        sharedPreferences.getString(ApiEndpoints.themeModeStorageKey);
 
     ThemeMode mode = ThemeMode.system;
     if (savedTheme == 'light') mode = ThemeMode.light;
@@ -61,7 +63,8 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     if (event.mode == ThemeMode.light) themeString = 'light';
     if (event.mode == ThemeMode.dark) themeString = 'dark';
 
-    await sharedPreferences.setString(ApiEndpoints.themeModeStorageKey, themeString);
+    await sharedPreferences.setString(
+        ApiEndpoints.themeModeStorageKey, themeString);
 
     emit(state.copyWith(
       themeMode: event.mode,

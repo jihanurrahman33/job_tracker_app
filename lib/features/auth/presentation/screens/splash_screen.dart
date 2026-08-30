@@ -63,7 +63,10 @@ class _SplashScreenState extends State<SplashScreen> {
                 'Organize your career journey',
                 style: TextStyle(
                   fontSize: 14,
-                  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+                  color: Theme.of(context)
+                      .colorScheme
+                      .onSurface
+                      .withValues(alpha: 0.6),
                 ),
               ),
               const SizedBox(height: 32),

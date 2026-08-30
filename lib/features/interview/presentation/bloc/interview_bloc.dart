@@ -20,7 +20,8 @@ class InterviewBloc extends Bloc<InterviewEvent, InterviewState> {
     LoadInterviewsForAppEvent event,
     Emitter<InterviewState> emit,
   ) async {
-    emit(state.copyWith(status: InterviewListStatus.loading, errorMessage: null));
+    emit(state.copyWith(
+        status: InterviewListStatus.loading, errorMessage: null));
 
     final result = await getInterviewsByAppUseCase(
       GetInterviewsByAppParams(applicationId: event.applicationId),
@@ -44,10 +45,12 @@ class InterviewBloc extends Bloc<InterviewEvent, InterviewState> {
     Emitter<InterviewState> emit,
   ) async {
     final prevList = state.interviews;
-    final updatedList = state.interviews.where((i) => i.id != event.id).toList();
+    final updatedList =
+        state.interviews.where((i) => i.id != event.id).toList();
     emit(state.copyWith(interviews: updatedList));
 
-    final result = await deleteInterviewUseCase(DeleteInterviewParams(id: event.id));
+    final result =
+        await deleteInterviewUseCase(DeleteInterviewParams(id: event.id));
 
     result.fold(
       (failure) {

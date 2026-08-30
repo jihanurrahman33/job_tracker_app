@@ -103,7 +103,8 @@ class ReminderBloc extends Bloc<ReminderEvent, ReminderState> {
     final updated = state.reminders.where((r) => r.id != event.id).toList();
     emit(state.copyWith(reminders: updated));
 
-    final result = await deleteReminderUseCase(DeleteReminderParams(id: event.id));
+    final result =
+        await deleteReminderUseCase(DeleteReminderParams(id: event.id));
 
     result.fold(
       (failure) {

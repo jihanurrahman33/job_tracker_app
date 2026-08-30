@@ -1,7 +1,13 @@
 import 'package:equatable/equatable.dart';
 import '../../domain/entities/user_entity.dart';
 
-enum AuthStatus { initial, unauthenticated, authenticating, authenticated, failure }
+enum AuthStatus {
+  initial,
+  unauthenticated,
+  authenticating,
+  authenticated,
+  failure
+}
 
 class AuthState extends Equatable {
   final AuthStatus status;
@@ -16,7 +22,8 @@ class AuthState extends Equatable {
     this.errorMessage,
   });
 
-  bool get isAuthenticated => status == AuthStatus.authenticated && user != null;
+  bool get isAuthenticated =>
+      status == AuthStatus.authenticated && user != null;
 
   AuthState copyWith({
     AuthStatus? status,

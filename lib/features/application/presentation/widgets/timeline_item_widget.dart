@@ -72,7 +72,8 @@ class TimelineItemWidget extends StatelessWidget {
                         event.createdAt.toDateTimeString(),
                         style: TextStyle(
                           fontSize: 11,
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                          color: theme.colorScheme.onSurface
+                              .withValues(alpha: 0.5),
                         ),
                       ),
                     ],
@@ -84,7 +85,8 @@ class TimelineItemWidget extends StatelessWidget {
                       'Moved from ${event.fromStatus}',
                       style: TextStyle(
                         fontSize: 12,
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                        color:
+                            theme.colorScheme.onSurface.withValues(alpha: 0.6),
                       ),
                     ),
                   ],

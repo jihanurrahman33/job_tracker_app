@@ -48,7 +48,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       }
     }
 
-    throw const ServerException(message: 'Invalid response format from server.');
+    throw const ServerException(
+        message: 'Invalid response format from server.');
   }
 
   @override
@@ -76,7 +77,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       }
     }
 
-    throw const ServerException(message: 'Invalid response format from server.');
+    throw const ServerException(
+        message: 'Invalid response format from server.');
   }
 
   @override
@@ -96,6 +98,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       return UserModel.fromJson(response);
     }
 
-    throw const ServerException(message: 'Invalid profile response from server.');
+    throw const ServerException(
+        message: 'Invalid profile response from server.');
   }
 }

@@ -82,13 +82,16 @@ class _ApplicationDetailViewState extends State<ApplicationDetailView> {
       context: context,
       builder: (dialogContext) => StatefulBuilder(
         builder: (context, setDialogState) => AlertDialog(
-          title: const Text('Update Status', style: TextStyle(fontWeight: FontWeight.bold)),
+          title: const Text('Update Status',
+              style: TextStyle(fontWeight: FontWeight.bold)),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Select New Pipeline Stage:', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+                const Text('Select New Pipeline Stage:',
+                    style:
+                        TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
                 const SizedBox(height: 8),
                 DropdownButtonFormField<String>(
                   value: selectedStatus,
@@ -188,7 +191,8 @@ class _ApplicationDetailViewState extends State<ApplicationDetailView> {
             return EmptyStateWidget(
               icon: Icons.error_outline,
               title: 'Could not load application',
-              description: state.errorMessage ?? 'Please check your connection and retry.',
+              description: state.errorMessage ??
+                  'Please check your connection and retry.',
               actionText: 'Retry',
               isError: true,
               onAction: () {
@@ -218,9 +222,12 @@ class _ApplicationDetailViewState extends State<ApplicationDetailView> {
                           children: [
                             CircleAvatar(
                               radius: 28,
-                              backgroundColor: AppColors.primary.withValues(alpha: 0.12),
+                              backgroundColor:
+                                  AppColors.primary.withValues(alpha: 0.12),
                               child: Text(
-                                app.company.isNotEmpty ? app.company[0].toUpperCase() : 'C',
+                                app.company.isNotEmpty
+                                    ? app.company[0].toUpperCase()
+                                    : 'C',
                                 style: const TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold,
@@ -235,15 +242,18 @@ class _ApplicationDetailViewState extends State<ApplicationDetailView> {
                                 children: [
                                   Text(
                                     app.position,
-                                    style: theme.textTheme.headlineSmall?.copyWith(
+                                    style:
+                                        theme.textTheme.headlineSmall?.copyWith(
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
                                     app.company,
-                                    style: theme.textTheme.titleMedium?.copyWith(
-                                      color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                                    style:
+                                        theme.textTheme.titleMedium?.copyWith(
+                                      color: theme.colorScheme.onSurface
+                                          .withValues(alpha: 0.7),
                                     ),
                                   ),
                                 ],
@@ -257,8 +267,10 @@ class _ApplicationDetailViewState extends State<ApplicationDetailView> {
                             StatusBadge(status: app.status, fontSize: 13),
                             const Spacer(),
                             OutlinedButton.icon(
-                              onPressed: () => _showStatusChangeDialog(context, app.status),
-                              icon: const Icon(Icons.swap_horiz_rounded, size: 18),
+                              onPressed: () =>
+                                  _showStatusChangeDialog(context, app.status),
+                              icon: const Icon(Icons.swap_horiz_rounded,
+                                  size: 18),
                               label: const Text('Change Status'),
                             ),
                           ],
@@ -294,9 +306,14 @@ class _ApplicationDetailViewState extends State<ApplicationDetailView> {
                         ),
                         if (app.notes != null && app.notes!.isNotEmpty) ...[
                           const SizedBox(height: 16),
-                          const Text('Notes:', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
+                          const Text('Notes:',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600, fontSize: 13)),
                           const SizedBox(height: 4),
-                          Text(app.notes!, style: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.8))),
+                          Text(app.notes!,
+                              style: TextStyle(
+                                  color: theme.colorScheme.onSurface
+                                      .withValues(alpha: 0.8))),
                         ],
                       ],
                     ),
@@ -308,7 +325,9 @@ class _ApplicationDetailViewState extends State<ApplicationDetailView> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Interviews & Rounds', style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+                    Text('Interviews & Rounds',
+                        style: theme.textTheme.titleMedium
+                            ?.copyWith(fontWeight: FontWeight.bold)),
                     TextButton.icon(
                       onPressed: () async {
                         final created = await context.push<bool>(
@@ -334,7 +353,9 @@ class _ApplicationDetailViewState extends State<ApplicationDetailView> {
                       child: Center(
                         child: Text(
                           'No interviews scheduled yet. Tap "Add Round" above.',
-                          style: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.6)),
+                          style: TextStyle(
+                              color: theme.colorScheme.onSurface
+                                  .withValues(alpha: 0.6)),
                         ),
                       ),
                     ),
@@ -344,7 +365,8 @@ class _ApplicationDetailViewState extends State<ApplicationDetailView> {
                     (interview) => InterviewCardWidget(
                       interview: interview,
                       onTap: () async {
-                        await context.push('/interviews/${interview.id}', extra: interview);
+                        await context.push('/interviews/${interview.id}',
+                            extra: interview);
                         _fetchInterviews();
                       },
                     ),
@@ -353,7 +375,9 @@ class _ApplicationDetailViewState extends State<ApplicationDetailView> {
                 const SizedBox(height: 24),
 
                 // Status Timeline
-                Text('Status History Timeline', style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+                Text('Status History Timeline',
+                    style: theme.textTheme.titleMedium
+                        ?.copyWith(fontWeight: FontWeight.bold)),
                 const SizedBox(height: 12),
                 if (state.events.isEmpty)
                   Card(
@@ -362,7 +386,9 @@ class _ApplicationDetailViewState extends State<ApplicationDetailView> {
                       child: Center(
                         child: Text(
                           'Initial stage recorded on ${app.createdAt.toShortDate()}',
-                          style: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.6)),
+                          style: TextStyle(
+                              color: theme.colorScheme.onSurface
+                                  .withValues(alpha: 0.6)),
                         ),
                       ),
                     ),
@@ -404,13 +430,20 @@ class _ApplicationDetailViewState extends State<ApplicationDetailView> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, size: 16, color: theme.colorScheme.onSurface.withValues(alpha: 0.5)),
+        Icon(icon,
+            size: 16,
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.5)),
         const SizedBox(width: 6),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(label, style: TextStyle(fontSize: 10, color: theme.colorScheme.onSurface.withValues(alpha: 0.5))),
-            Text(value, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+            Text(label,
+                style: TextStyle(
+                    fontSize: 10,
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.5))),
+            Text(value,
+                style:
+                    const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
           ],
         ),
       ],

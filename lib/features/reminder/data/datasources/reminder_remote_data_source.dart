@@ -36,7 +36,8 @@ class ReminderRemoteDataSourceImpl implements ReminderRemoteDataSource {
     if (response is Map<String, dynamic> && response.containsKey('data')) {
       final list = response['data'] as List<dynamic>?;
       return list
-              ?.map((item) => ReminderModel.fromJson(item as Map<String, dynamic>))
+              ?.map((item) =>
+                  ReminderModel.fromJson(item as Map<String, dynamic>))
               .toList() ??
           [];
     } else if (response is List<dynamic>) {
@@ -91,7 +92,8 @@ class ReminderRemoteDataSourceImpl implements ReminderRemoteDataSource {
 
     if (title != null) body['title'] = title.trim();
     if (description != null) body['description'] = description.trim();
-    if (remindAt != null) body['remind_at'] = remindAt.toUtc().toIso8601String();
+    if (remindAt != null)
+      body['remind_at'] = remindAt.toUtc().toIso8601String();
     if (completed != null) body['completed'] = completed;
 
     final response = await apiClient.patch(

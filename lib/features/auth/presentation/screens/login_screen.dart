@@ -68,7 +68,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     const AuthHeaderWidget(
                       title: 'Welcome Back',
-                      subtitle: 'Sign in to access your job applications and interviews',
+                      subtitle:
+                          'Sign in to access your job applications and interviews',
                     ),
                     const SizedBox(height: 32),
                     AppTextFormField(
@@ -128,7 +129,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                         GestureDetector(
-                          onTap: isLoading ? null : () => context.go('/register'),
+                          onTap:
+                              isLoading ? null : () => context.go('/register'),
                           child: Text(
                             'Sign Up',
                             style: TextStyle(

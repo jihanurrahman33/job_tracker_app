@@ -93,7 +93,8 @@ class ApplicationFilterBottomSheet extends StatelessWidget {
                     selectedColor: color.withValues(alpha: 0.2),
                     labelStyle: TextStyle(
                       color: isSelected ? color : null,
-                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                      fontWeight:
+                          isSelected ? FontWeight.bold : FontWeight.normal,
                     ),
                     onSelected: (selected) {
                       onStatusSelected(selected ? status : null);

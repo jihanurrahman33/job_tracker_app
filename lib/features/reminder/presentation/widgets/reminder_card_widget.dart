@@ -33,7 +33,8 @@ class ReminderCardWidget extends StatelessWidget {
             children: [
               Checkbox(
                 value: reminder.completed,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5)),
                 activeColor: AppColors.secondary,
                 onChanged: (val) {
                   if (val != null) onToggle(val);
@@ -62,7 +63,8 @@ class ReminderCardWidget extends StatelessWidget {
                       Text(
                         reminder.description!,
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.65),
+                          color: theme.colorScheme.onSurface
+                              .withValues(alpha: 0.65),
                           decoration: reminder.completed
                               ? TextDecoration.lineThrough
                               : null,
@@ -79,17 +81,20 @@ class ReminderCardWidget extends StatelessWidget {
                           size: 13,
                           color: isOverdue
                               ? AppColors.statusRejected
-                              : theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                              : theme.colorScheme.onSurface
+                                  .withValues(alpha: 0.5),
                         ),
                         const SizedBox(width: 4),
                         Text(
                           reminder.remindAt.toRelativeString(),
                           style: TextStyle(
                             fontSize: 11,
-                            fontWeight: isOverdue ? FontWeight.bold : FontWeight.w500,
+                            fontWeight:
+                                isOverdue ? FontWeight.bold : FontWeight.w500,
                             color: isOverdue
                                 ? AppColors.statusRejected
-                                : theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                                : theme.colorScheme.onSurface
+                                    .withValues(alpha: 0.6),
                           ),
                         ),
                         if (isOverdue) ...[
@@ -100,7 +105,8 @@ class ReminderCardWidget extends StatelessWidget {
                               vertical: 2,
                             ),
                             decoration: BoxDecoration(
-                              color: AppColors.statusRejected.withValues(alpha: 0.1),
+                              color: AppColors.statusRejected
+                                  .withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(4),
                             ),
                             child: const Text(

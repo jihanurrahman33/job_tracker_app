@@ -35,7 +35,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   void _refreshAll() {
-    context.read<DashboardBloc>().add(const LoadDashboardDataEvent(refresh: true));
+    context
+        .read<DashboardBloc>()
+        .add(const LoadDashboardDataEvent(refresh: true));
     context.read<ReminderBloc>().add(const LoadRemindersEvent(refresh: true));
   }
 
@@ -54,7 +56,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               children: [
                 Text(
                   'Hello, $userName 👋',
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 Text(
                   'Track your career pipeline',
@@ -83,15 +86,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
           }
         },
         builder: (context, state) {
-          if (state.status == DashboardStatus.loading && state.statistics == null) {
-            return const LoadingIndicator(message: 'Loading dashboard metrics...');
+          if (state.status == DashboardStatus.loading &&
+              state.statistics == null) {
+            return const LoadingIndicator(
+                message: 'Loading dashboard metrics...');
           }
 
-          if (state.status == DashboardStatus.error && state.statistics == null) {
+          if (state.status == DashboardStatus.error &&
+              state.statistics == null) {
             return EmptyStateWidget(
               icon: Icons.bar_chart_rounded,
               title: 'Could not load statistics',
-              description: state.errorMessage ?? 'Please check your connection and retry.',
+              description: state.errorMessage ??
+                  'Please check your connection and retry.',
               actionText: 'Retry',
               isError: true,
               onAction: _refreshAll,
@@ -184,16 +191,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             children: [
                               Expanded(
                                 child: OutlinedButton.icon(
-                                  onPressed: () => context.push('/applications/create'),
-                                  icon: const Icon(Icons.add_circle_outline, size: 18),
+                                  onPressed: () =>
+                                      context.push('/applications/create'),
+                                  icon: const Icon(Icons.add_circle_outline,
+                                      size: 18),
                                   label: const Text('Add Job'),
                                 ),
                               ),
                               const SizedBox(width: 8),
                               Expanded(
                                 child: OutlinedButton.icon(
-                                  onPressed: () => context.push('/reminders/create'),
-                                  icon: const Icon(Icons.alarm_add_rounded, size: 18),
+                                  onPressed: () =>
+                                      context.push('/reminders/create'),
+                                  icon: const Icon(Icons.alarm_add_rounded,
+                                      size: 18),
                                   label: const Text('Reminder'),
                                 ),
                               ),

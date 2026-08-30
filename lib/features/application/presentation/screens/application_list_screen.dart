@@ -53,18 +53,22 @@ class _ApplicationListScreenState extends State<ApplicationListScreen> {
     return ResponsiveScaffold(
       maxWidth: 900,
       appBar: AppBar(
-        title: const Text('Job Applications', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: const Text('Job Applications',
+            style: TextStyle(fontWeight: FontWeight.bold)),
         actions: [
           IconButton(
             icon: const Icon(Icons.tune_rounded),
             tooltip: 'Filter Applications',
             onPressed: () {
-              final currentStatus = context.read<ApplicationBloc>().state.selectedStatus;
+              final currentStatus =
+                  context.read<ApplicationBloc>().state.selectedStatus;
               ApplicationFilterBottomSheet.show(
                 context,
                 currentStatus: currentStatus,
                 onStatusSelected: (status) {
-                  context.read<ApplicationBloc>().add(FilterStatusChangedEvent(status));
+                  context
+                      .read<ApplicationBloc>()
+                      .add(FilterStatusChangedEvent(status));
                 },
               );
             },
@@ -75,7 +79,9 @@ class _ApplicationListScreenState extends State<ApplicationListScreen> {
         onPressed: () async {
           final created = await context.push<bool>('/applications/create');
           if (created == true && mounted) {
-            context.read<ApplicationBloc>().add(const LoadApplicationsEvent(refresh: true));
+            context
+                .read<ApplicationBloc>()
+                .add(const LoadApplicationsEvent(refresh: true));
           }
         },
         icon: const Icon(Icons.add),
@@ -105,13 +111,17 @@ class _ApplicationListScreenState extends State<ApplicationListScreen> {
                                 icon: const Icon(Icons.clear, size: 18),
                                 onPressed: () {
                                   _searchController.clear();
-                                  context.read<ApplicationBloc>().add(const SearchQueryChangedEvent(''));
+                                  context
+                                      .read<ApplicationBloc>()
+                                      .add(const SearchQueryChangedEvent(''));
                                 },
                               )
                             : null,
                       ),
                       onChanged: (val) {
-                        context.read<ApplicationBloc>().add(SearchQueryChangedEvent(val));
+                        context
+                            .read<ApplicationBloc>()
+                            .add(SearchQueryChangedEvent(val));
                       },
                     ),
                     if (state.selectedStatus != null) ...[
@@ -122,16 +132,19 @@ class _ApplicationListScreenState extends State<ApplicationListScreen> {
                             'Filtered by: ',
                             style: TextStyle(
                               fontSize: 12,
-                              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                              color: theme.colorScheme.onSurface
+                                  .withValues(alpha: 0.6),
                             ),
                           ),
                           Chip(
                             label: Text(
                               state.selectedStatus!.toTitleCaseFromSnake(),
-                              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                              style: const TextStyle(
+                                  fontSize: 12, fontWeight: FontWeight.bold),
                             ),
-                            backgroundColor: AppColors.getStatusColor(state.selectedStatus!)
-                                .withValues(alpha: 0.15),
+                            backgroundColor:
+                                AppColors.getStatusColor(state.selectedStatus!)
+                                    .withValues(alpha: 0.15),
                             deleteIcon: const Icon(Icons.close, size: 14),
                             onDeleted: () {
                               context
@@ -152,7 +165,8 @@ class _ApplicationListScreenState extends State<ApplicationListScreen> {
                   builder: (context) {
                     if (state.status == ApplicationListStatus.loading &&
                         state.applications.isEmpty) {
-                      return const LoadingIndicator(message: 'Loading applications...');
+                      return const LoadingIndicator(
+                          message: 'Loading applications...');
                     }
 
                     if (state.status == ApplicationListStatus.error &&
@@ -160,11 +174,14 @@ class _ApplicationListScreenState extends State<ApplicationListScreen> {
                       return EmptyStateWidget(
                         icon: Icons.error_outline,
                         title: 'Unable to load applications',
-                        description: state.errorMessage ?? 'Please check your connection and retry.',
+                        description: state.errorMessage ??
+                            'Please check your connection and retry.',
                         actionText: 'Retry',
                         isError: true,
                         onAction: () {
-                          context.read<ApplicationBloc>().add(const LoadApplicationsEvent(refresh: true));
+                          context
+                              .read<ApplicationBloc>()
+                              .add(const LoadApplicationsEvent(refresh: true));
                         },
                       );
                     }
@@ -173,13 +190,18 @@ class _ApplicationListScreenState extends State<ApplicationListScreen> {
                       return EmptyStateWidget(
                         icon: Icons.work_off_outlined,
                         title: 'No applications found',
-                        description: state.selectedStatus != null || state.searchQuery.isNotEmpty
+                        description: state.selectedStatus != null ||
+                                state.searchQuery.isNotEmpty
                             ? 'No jobs match your current filters. Try changing or clearing them.'
                             : 'Start by tracking your first job application!',
-                        actionText: state.selectedStatus != null ? 'Clear Filter' : 'Add Job',
+                        actionText: state.selectedStatus != null
+                            ? 'Clear Filter'
+                            : 'Add Job',
                         onAction: () {
                           if (state.selectedStatus != null) {
-                            context.read<ApplicationBloc>().add(const FilterStatusChangedEvent(null));
+                            context
+                                .read<ApplicationBloc>()
+                                .add(const FilterStatusChangedEvent(null));
                           } else {
                             context.push('/applications/create');
                           }
@@ -189,12 +211,15 @@ class _ApplicationListScreenState extends State<ApplicationListScreen> {
 
                     return RefreshIndicator(
                       onRefresh: () async {
-                        context.read<ApplicationBloc>().add(const LoadApplicationsEvent(refresh: true));
+                        context
+                            .read<ApplicationBloc>()
+                            .add(const LoadApplicationsEvent(refresh: true));
                       },
                       child: ListView.builder(
                         controller: _scrollController,
                         padding: const EdgeInsets.fromLTRB(16, 4, 16, 80),
-                        itemCount: state.applications.length + (state.hasMore ? 1 : 0),
+                        itemCount:
+                            state.applications.length + (state.hasMore ? 1 : 0),
                         itemBuilder: (context, index) {
                           if (index == state.applications.length) {
                             return const Padding(
@@ -203,7 +228,8 @@ class _ApplicationListScreenState extends State<ApplicationListScreen> {
                                 child: SizedBox(
                                   width: 24,
                                   height: 24,
-                                  child: CircularProgressIndicator(strokeWidth: 2),
+                                  child:
+                                      CircularProgressIndicator(strokeWidth: 2),
                                 ),
                               ),
                             );
@@ -218,13 +244,15 @@ class _ApplicationListScreenState extends State<ApplicationListScreen> {
                               return await ConfirmationDialog.show(
                                 context,
                                 title: 'Delete Application',
-                                content: 'Are you sure you want to delete ${application.position} at ${application.company}?',
+                                content:
+                                    'Are you sure you want to delete ${application.position} at ${application.company}?',
                                 confirmText: 'Delete',
                                 isDestructive: true,
                               );
                             },
                             onDismissed: (_) {
-                              context.read<ApplicationBloc>().add(DeleteApplicationItemEvent(application.id));
+                              context.read<ApplicationBloc>().add(
+                                  DeleteApplicationItemEvent(application.id));
                             },
                             background: Container(
                               margin: const EdgeInsets.symmetric(vertical: 6),
@@ -233,8 +261,10 @@ class _ApplicationListScreenState extends State<ApplicationListScreen> {
                                 borderRadius: BorderRadius.circular(16),
                               ),
                               alignment: Alignment.centerRight,
-                              padding: const EdgeInsets.symmetric(horizontal: 20),
-                              child: const Icon(Icons.delete_outline, color: Colors.white),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              child: const Icon(Icons.delete_outline,
+                                  color: Colors.white),
                             ),
                             child: ApplicationCardWidget(
                               application: application,

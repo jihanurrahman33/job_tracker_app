@@ -39,7 +39,8 @@ class ApplicationState extends Equatable {
       status: status ?? this.status,
       applications: applications ?? this.applications,
       pagination: pagination ?? this.pagination,
-      selectedStatus: clearStatus ? null : (selectedStatus ?? this.selectedStatus),
+      selectedStatus:
+          clearStatus ? null : (selectedStatus ?? this.selectedStatus),
       searchQuery: searchQuery ?? this.searchQuery,
       sortBy: sortBy ?? this.sortBy,
       errorMessage: errorMessage,
