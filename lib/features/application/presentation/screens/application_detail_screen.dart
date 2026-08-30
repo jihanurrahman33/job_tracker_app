@@ -11,6 +11,10 @@ import 'package:job_tracker/core/widgets/empty_state_widget.dart';
 import 'package:job_tracker/core/widgets/loading_indicator.dart';
 import 'package:job_tracker/core/widgets/responsive_scaffold.dart';
 import 'package:job_tracker/core/widgets/status_badge.dart';
+import 'package:job_tracker/features/application/presentation/bloc/application_bloc.dart';
+import 'package:job_tracker/features/application/presentation/bloc/application_event.dart';
+import 'package:job_tracker/features/dashboard/presentation/bloc/dashboard_bloc.dart';
+import 'package:job_tracker/features/dashboard/presentation/bloc/dashboard_event.dart';
 import 'package:job_tracker/features/interview/domain/entities/interview_entity.dart';
 import 'package:job_tracker/features/interview/domain/usecases/get_interviews_by_app_usecase.dart';
 import 'package:job_tracker/features/interview/presentation/widgets/interview_card_widget.dart';
@@ -73,21 +77,24 @@ class _ApplicationDetailViewState extends State<ApplicationDetailView> {
     }
   }
 
-  void _showStatusChangeDialog(BuildContext context, String currentStatus) {
+  void _showStatusChangeDialog(BuildContext parentContext, String currentStatus) {
     String selectedStatus = currentStatus;
     final notesController = TextEditingController();
+    final detailBloc = parentContext.read<ApplicationDetailBloc>();
+    final appBloc = parentContext.read<ApplicationBloc>();
+    final dashboardBloc = parentContext.read<DashboardBloc>();
 
     showDialog(
-      context: context,
+      context: parentContext,
       builder: (dialogContext) => StatefulBuilder(
         builder: (context, setDialogState) => AlertDialog(
-          title: const Text('Update Status', style: TextStyle(fontWeight: FontWeight.bold)),
+          title: const Text('Update Pipeline Status', style: TextStyle(fontWeight: FontWeight.bold)),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Select New Pipeline Stage:', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+                const Text('Select New Stage:', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
                 const SizedBox(height: 8),
                 DropdownButtonFormField<String>(
                   isExpanded: true,
@@ -122,15 +129,18 @@ class _ApplicationDetailViewState extends State<ApplicationDetailView> {
             ElevatedButton(
               onPressed: () {
                 Navigator.pop(dialogContext);
-                context.read<ApplicationDetailBloc>().add(
-                      ChangeApplicationStatusEvent(
-                        id: widget.applicationId,
-                        newStatus: selectedStatus,
-                        notes: notesController.text.trim().isNotEmpty
-                            ? notesController.text.trim()
-                            : null,
-                      ),
-                    );
+                detailBloc.add(
+                  ChangeApplicationStatusEvent(
+                    id: widget.applicationId,
+                    newStatus: selectedStatus,
+                    notes: notesController.text.trim().isNotEmpty
+                        ? notesController.text.trim()
+                        : null,
+                  ),
+                );
+                appBloc.add(const LoadApplicationsEvent(refresh: true));
+                dashboardBloc.add(const LoadDashboardDataEvent(refresh: true));
+                parentContext.showSnackBar('Status updated to ${selectedStatus.toTitleCaseFromSnake()}!');
               },
               child: const Text('Update'),
             ),
